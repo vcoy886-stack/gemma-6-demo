@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MediaKit IA — Media kits profesionales en 2 minutos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/styles.css" />
+<style>
+  .mk-preview {
+    background: linear-gradient(160deg, #171a23, #10121a);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-top: 18px;
+  }
+  .mk-preview .mk-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .mk-avatar {
+    width: 58px; height: 58px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--gem-1), var(--gem-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .mk-head h4 { font-size: 18px; font-weight: 700; }
+  .mk-head p { font-size: 13px; color: var(--gem-3); font-family: var(--font-mono); }
+  .mk-bio { font-size: 14px; color: var(--text-dim); margin-bottom: 20px; }
+  .mk-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap: 12px; margin-bottom: 20px; }
+  .mk-stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; text-align: center; }
+  .mk-stat .num { font-size: 20px; font-weight: 700; }
+  .mk-stat .lbl { font-size: 11.5px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+  .mk-rates { display: flex; gap: 10px; flex-wrap: wrap; }
+  .mk-rate { background: var(--surface-2); border: 1px solid var(--border); border-radius: 100px; padding: 8px 16px; font-size: 13px; }
+  .mk-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  @media print {
+    body * { visibility: hidden; }
+    #mkPreview, #mkPreview * { visibility: visible; }
+    #mkPreview { position: absolute; top: 0; left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="../../index.html"><span class="gem-icon">🔮</span> Mini Apps IA</a>
+  <div class="nav-links">
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#demo">Probar</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <a class="btn btn-primary btn-sm" href="#demo">Crear mi media kit</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Para influencers y creadores de contenido</div>
+  <h1>Tu <span class="grad">media kit profesional</span> listo en 2 minutos</h1>
+  <p class="sub">Deja de armar el media kit a mano en Canva cada vez que una marca te escribe. Pon tus stats, tu bio y tus tarifas — la IA lo arma y lo mantiene siempre actualizado.</p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn btn-primary">Crear mi media kit gratis</a>
+    <a href="#precios" class="btn btn-ghost">Ver precios</a>
+  </div>
+</section>
+
+<section id="como-funciona" class="tight">
+  <div class="section-head">
+    <div class="kicker">El problema</div>
+    <h2>Las marcas piden media kit y tú no tienes tiempo</h2>
+    <p>Cada colaboración nueva significa actualizar diapositivas, exportar PDF y perder media hora en diseño en vez de crear contenido.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="icon">📊</div>
+      <h3>Stats siempre al día</h3>
+      <p>Actualiza tus números cuando quieras y tu media kit se regenera al instante, sin tocar diseño.</p>
+    </div>
+    <div class="card">
+      <div class="icon">✍️</div>
+      <h3>Bio pulida con IA</h3>
+      <p>Escribe tu bio en bruto y la IA la convierte en un texto profesional que vende tu marca personal.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📄</div>
+      <h3>Exporta e imprime</h3>
+      <p>Descárgalo como PDF o compártelo con un link, listo para mandar a cualquier marca.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="section-head">
+    <div class="kicker">Pruébalo ahora</div>
+    <h2>Genera tu media kit</h2>
+    <p>Completa tus datos — la vista previa se actualiza en vivo.</p>
+  </div>
+
+  <div class="demo-panel">
+    <div class="demo-head">
+      <div class="status-dot ready"></div>
+      <span style="font-size:13px;color:var(--text-dim)">Herramienta gratuita — funciona 100% en tu navegador</span>
+    </div>
+    <div class="demo-body">
+
+      <div class="field-row">
+        <div>
+          <label for="mkName">Nombre / marca personal</label>
+          <input type="text" id="mkName" placeholder="Ej. Camila Ríos" />
+        </div>
+        <div>
+          <label for="mkNiche">Nicho</label>
+          <input type="text" id="mkNiche" placeholder="Ej. Lifestyle & fitness" />
+        </div>
+      </div>
+
+      <label for="mkBio">Bio en bruto (tal cual la escribirías tú)</label>
+      <textarea id="mkBio" placeholder="Ej. hago contenido de fitness y comida saludable, me gusta mostrar rutinas rapidas para gente ocupada"></textarea>
+      <div class="chip-row">
+        <button class="chip" id="mkPolishBtn" type="button">✨ Pulir bio con IA on-device</button>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <label for="mkIgFollowers">Seguidores Instagram</label>
+          <input type="number" id="mkIgFollowers" placeholder="24000" />
+        </div>
+        <div>
+          <label for="mkIgEngagement">Engagement rate (%)</label>
+          <input type="number" id="mkIgEngagement" placeholder="5.2" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div>
+          <label for="mkTtFollowers">Seguidores TikTok</label>
+          <input type="number" id="mkTtFollowers" placeholder="58000" />
+        </div>
+        <div>
+          <label for="mkAvgViews">Vistas promedio por video</label>
+          <input type="number" id="mkAvgViews" placeholder="15000" />
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <label for="mkRatePost">Tarifa post feed (USD)</label>
+          <input type="number" id="mkRatePost" placeholder="150" />
+        </div>
+        <div>
+          <label for="mkRateReel">Tarifa reel/video (USD)</label>
+          <input type="number" id="mkRateReel" placeholder="300" />
+        </div>
+      </div>
+
+      <label for="mkEmail">Email de contacto</label>
+      <input type="email" id="mkEmail" placeholder="tu@email.com" />
+
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" id="mkGenerateBtn" type="button">Generar media kit</button>
+      </div>
+
+      <div id="mkPreview" class="mk-preview" style="display:none">
+        <div class="mk-head">
+          <div class="mk-avatar" id="mkAvatarLetter">?</div>
+          <div>
+            <h4 id="mkPreviewName">—</h4>
+            <p id="mkPreviewNiche">—</p>
+          </div>
+        </div>
+        <p class="mk-bio" id="mkPreviewBio">—</p>
+        <div class="mk-stats" id="mkPreviewStats"></div>
+        <div class="mk-rates" id="mkPreviewRates"></div>
+      </div>
+
+      <div class="mk-actions" id="mkActions" style="display:none">
+        <button class="btn btn-ghost btn-sm" id="mkPrintBtn" type="button">🖨️ Exportar / Imprimir PDF</button>
+        <button class="btn btn-ghost btn-sm" id="mkCopyBtn" type="button">📋 Copiar como texto</button>
+      </div>
+
+      <p class="footer-note" id="mkAiStatus"></p>
+    </div>
+  </div>
+</section>
+
+<section id="precios" class="tight">
+  <div class="section-head">
+    <div class="kicker">Precios</div>
+    <h2>Un media kit siempre listo, por menos de lo que cuesta un café al mes</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <h3>Gratis</h3>
+      <div class="price">$0</div>
+      <div class="price-note">para siempre</div>
+      <ul>
+        <li>1 media kit</li>
+        <li>Exportar como texto</li>
+        <li>Marca de agua "hecho con MediaKit IA"</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Empezar gratis</a>
+    </div>
+    <div class="plan featured">
+      <h3>Pro</h3>
+      <div class="price">$9<span>/mes</span></div>
+      <div class="price-note">facturación mensual, cancela cuando quieras</div>
+      <ul>
+        <li>Media kits ilimitados</li>
+        <li>Exportar a PDF sin marca de agua</li>
+        <li>Bio pulida con IA ilimitada</li>
+        <li>Link compartible siempre actualizado</li>
+      </ul>
+      <a href="#demo" class="btn btn-primary">Empezar prueba Pro</a>
+    </div>
+    <div class="plan">
+      <h3>Agencia</h3>
+      <div class="price">$29<span>/mes</span></div>
+      <div class="price-note">para managers y agencias de creadores</div>
+      <ul>
+        <li>Todo lo de Pro</li>
+        <li>Hasta 15 perfiles de creadores</li>
+        <li>Marca blanca con tu logo</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Hablar con ventas</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>MediaKit IA — parte de la suite Mini Apps IA · funciona 100% en tu navegador, sin subir tus datos a ningún servidor</p>
+  <div style="margin-top:10px"><a href="../../index.html">← Volver al menú de mini apps</a></div>
+</footer>
+
+<script type="module">
+import { GemmaEngine } from "../shared/gemma-engine.js";
+
+const $ = (id) => document.getElementById(id);
+const engine = new GemmaEngine();
+
+function initials(name) {
+  return (name || "?").trim().split(/\s+/).slice(0,2).map(w => w[0]?.toUpperCase() || "").join("") || "?";
+}
+
+function fmtNum(n) {
+  n = Number(n) || 0;
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(/\.0$/,"") + "M";
+  if (n >= 1000) return (n/1000).toFixed(1).replace(/\.0$/,"") + "K";
+  return String(n);
+}
+
+function renderPreview() {
+  const name = $("mkName").value.trim() || "Tu nombre";
+  const niche = $("mkNiche").value.trim() || "Tu nicho";
+  const bio = $("mkBio").value.trim() || "Tu bio aparecerá aquí.";
+  const ig = $("mkIgFollowers").value;
+  const igEng = $("mkIgEngagement").value;
+  const tt = $("mkTtFollowers").value;
+  const views = $("mkAvgViews").value;
+  const ratePost = $("mkRatePost").value;
+  const rateReel = $("mkRateReel").value;
+
+  $("mkAvatarLetter").textContent = initials(name);
+  $("mkPreviewName").textContent = name;
+  $("mkPreviewNiche").textContent = niche;
+  $("mkPreviewBio").textContent = bio;
+
+  const stats = [];
+  if (ig) stats.push([fmtNum(ig), "Instagram"]);
+  if (igEng) stats.push([igEng + "%", "Engagement"]);
+  if (tt) stats.push([fmtNum(tt), "TikTok"]);
+  if (views) stats.push([fmtNum(views), "Vistas prom."]);
+  $("mkPreviewStats").innerHTML = stats.map(([n,l]) =>
+    `<div class="mk-stat"><div class="num">${n}</div><div class="lbl">${l}</div></div>`
+  ).join("") || `<div class="mk-stat"><div class="num">—</div><div class="lbl">Agrega tus stats</div></div>`;
+
+  const rates = [];
+  if (ratePost) rates.push(`Post feed: $${ratePost}`);
+  if (rateReel) rates.push(`Reel/video: $${rateReel}`);
+  $("mkPreviewRates").innerHTML = rates.map(r => `<div class="mk-rate">${r}</div>`).join("");
+
+  $("mkPreview").style.display = "block";
+  $("mkActions").style.display = "flex";
+}
+
+$("mkGenerateBtn").addEventListener("click", renderPreview);
+
+$("mkPrintBtn").addEventListener("click", () => window.print());
+
+$("mkCopyBtn").addEventListener("click", async () => {
+  const text =
+`${$("mkPreviewName").textContent} — ${$("mkPreviewNiche").textContent}
+
+${$("mkPreviewBio").textContent}
+
+STATS
+${Array.from(document.querySelectorAll("#mkPreviewStats .mk-stat")).map(s => `- ${s.querySelector(".lbl").textContent}: ${s.querySelector(".num").textContent}`).join("\n")}
+
+TARIFAS
+${Array.from(document.querySelectorAll("#mkPreviewRates .mk-rate")).map(r => `- ${r.textContent}`).join("\n")}
+
+Contacto: ${$("mkEmail").value || "-"}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    $("mkCopyBtn").textContent = "✅ Copiado";
+    setTimeout(() => $("mkCopyBtn").textContent = "📋 Copiar como texto", 1800);
+  } catch {
+    alert(text);
+  }
+});
+
+$("mkPolishBtn").addEventListener("click", async () => {
+  const raw = $("mkBio").value.trim();
+  if (!raw) { $("mkBio").focus(); return; }
+
+  const statusEl = $("mkAiStatus");
+  const btn = $("mkPolishBtn");
+  btn.disabled = true;
+
+  if (!GemmaEngine.isSupported()) {
+    statusEl.textContent = "Tu navegador no soporta WebGPU — usa Chrome/Edge 113+ para la mejora con IA.";
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+    if (!engine.ready) {
+      statusEl.textContent = "Cargando modelo de IA en tu navegador…";
+      await engine.load((pct) => statusEl.textContent = `Cargando modelo de IA… ${Math.round(pct)}%`);
+    }
+    statusEl.textContent = "Puliendo tu bio…";
+    const niche = $("mkNiche").value.trim();
+    const sys = `Eres un copywriter experto en marca personal para creadores de contenido. Reescribe la siguiente bio en 2-3 frases, en español, tono cercano y profesional, resaltando el nicho "${niche}". Responde solo con la bio final, sin comillas ni explicaciones.`;
+    const result = await engine.generate(sys, raw, (partial) => {
+      $("mkBio").value = partial;
+    });
+    $("mkBio").value = result.trim();
+    statusEl.textContent = "Bio pulida ✅";
+    renderPreview();
+  } catch (err) {
+    statusEl.textContent = "No se pudo cargar la IA: " + err.message;
+  }
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>

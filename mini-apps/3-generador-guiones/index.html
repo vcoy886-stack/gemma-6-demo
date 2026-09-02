@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GuionIA — Ideas y hooks para Reels/TikTok en segundos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/styles.css" />
+<style>
+  .formula-badge {
+    display: inline-block; font-size: 11px; font-family: var(--font-mono);
+    color: var(--gem-3); border: 1px solid var(--border); border-radius: 6px;
+    padding: 2px 8px; margin-bottom: 6px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="../../index.html"><span class="gem-icon">🔮</span> Mini Apps IA</a>
+  <div class="nav-links">
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#demo">Probar</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <a class="btn btn-primary btn-sm" href="#demo">Generar ideas gratis</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Para creadores de contenido e infoproductores</div>
+  <h1>Nunca más te quedes sin <span class="grad">ideas para grabar</span></h1>
+  <p class="sub">Dinos tu nicho y en segundos tienes 10 hooks y guiones listos, basados en fórmulas de copywriting que sí funcionan en Reels y TikTok.</p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn btn-primary">Generar ideas gratis</a>
+    <a href="#precios" class="btn btn-ghost">Ver precios</a>
+  </div>
+</section>
+
+<section id="como-funciona" class="tight">
+  <div class="section-head">
+    <div class="kicker">El problema</div>
+    <h2>El bloqueo creativo te cuesta consistencia (y alcance)</h2>
+    <p>El algoritmo premia publicar seguido, pero pensar un buen gancho cada día agota.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="icon">🎯</div>
+      <h3>Fórmulas probadas</h3>
+      <p>Listicle, storytime, antes/después, mito vs. realidad, POV y más — las que más funcionan en corto formato.</p>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>Resultados instantáneos</h3>
+      <p>Sin esperar ninguna descarga: escribes tu nicho y obtienes 10 ideas al momento.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📝</div>
+      <h3>Guion completo con IA</h3>
+      <p>Elige tu hook favorito y expándelo a un guion completo con la IA on-device, sin costo de API.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="section-head">
+    <div class="kicker">Pruébalo ahora</div>
+    <h2>Genera tus próximas 10 ideas</h2>
+  </div>
+
+  <div class="demo-panel">
+    <div class="demo-head">
+      <div class="status-dot ready"></div>
+      <span style="font-size:13px;color:var(--text-dim)">Herramienta gratuita — funciona 100% en tu navegador</span>
+    </div>
+    <div class="demo-body">
+
+      <label for="gnNiche">Tu nicho o tema</label>
+      <input type="text" id="gnNiche" placeholder="Ej. finanzas personales, maquillaje, fitness en casa" />
+
+      <label for="gnFormat">Formato</label>
+      <select id="gnFormat">
+        <option value="Reel/TikTok">Reel / TikTok</option>
+        <option value="carrusel de Instagram">Carrusel de Instagram</option>
+        <option value="video de YouTube Shorts">YouTube Shorts</option>
+      </select>
+
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" id="gnGenerateBtn" type="button">Generar 10 ideas</button>
+      </div>
+
+      <div id="gnResults"></div>
+
+      <div id="gnScriptSection" style="display:none;margin-top:24px;border-top:1px solid var(--border);padding-top:20px">
+        <label>Hook seleccionado</label>
+        <div class="output-box" id="gnSelectedHook"></div>
+        <div style="margin-top:12px">
+          <button class="btn btn-ghost btn-sm" id="gnScriptBtn" type="button">✨ Convertir en guion completo con IA on-device</button>
+        </div>
+        <div class="output-box" id="gnScriptOutput" style="display:none"></div>
+        <p class="footer-note" id="gnAiStatus"></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="precios" class="tight">
+  <div class="section-head">
+    <div class="kicker">Precios</div>
+    <h2>Ideas ilimitadas, calendario de contenido listo</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <h3>Gratis</h3>
+      <div class="price">$0</div>
+      <div class="price-note">para siempre</div>
+      <ul>
+        <li>10 ideas por generación</li>
+        <li>3 generaciones por día</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Empezar gratis</a>
+    </div>
+    <div class="plan featured">
+      <h3>Creador</h3>
+      <div class="price">$12<span>/mes</span></div>
+      <div class="price-note">facturación mensual</div>
+      <ul>
+        <li>Generaciones ilimitadas</li>
+        <li>Guiones completos con IA on-device</li>
+        <li>Calendario de contenido mensual</li>
+      </ul>
+      <a href="#demo" class="btn btn-primary">Empezar prueba</a>
+    </div>
+    <div class="plan">
+      <h3>Agencia</h3>
+      <div class="price">$29<span>/mes</span></div>
+      <div class="price-note">para community managers</div>
+      <ul>
+        <li>Todo lo de Creador</li>
+        <li>Hasta 10 marcas/nichos guardados</li>
+        <li>Exportar calendario a CSV</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Hablar con ventas</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>GuionIA — parte de la suite Mini Apps IA</p>
+  <div style="margin-top:10px"><a href="../../index.html">← Volver al menú de mini apps</a></div>
+</footer>
+
+<script type="module">
+import { GemmaEngine } from "../shared/gemma-engine.js";
+
+const $ = (id) => document.getElementById(id);
+const engine = new GemmaEngine();
+
+const FORMULAS = [
+  { name: "Listicle", make: (n) => `${rand([3,5,7])} cosas sobre ${n} que nadie te dice` },
+  { name: "Storytime", make: (n) => `Así fue como aprendí ${n} de la peor manera` },
+  { name: "Antes/después", make: (n) => `Antes vs. después de aplicar esto en ${n}` },
+  { name: "Mito vs. realidad", make: (n) => `El mito de ${n} que te está costando resultados` },
+  { name: "POV", make: (n) => `POV: por fin entiendes ${n} en 60 segundos` },
+  { name: "Pregunta directa", make: (n) => `¿Por qué nadie te explica ${n} así de simple?` },
+  { name: "Dato curioso", make: (n) => `El dato sobre ${n} que cambia todo` },
+  { name: "Reto", make: (n) => `Te reto a probar esto de ${n} durante 7 días` },
+  { name: "Error común", make: (n) => `El error #1 que casi todos cometen en ${n}` },
+  { name: "Guía rápida", make: (n) => `${n} explicado en 3 pasos simples` },
+];
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+$("gnGenerateBtn").addEventListener("click", () => {
+  const niche = $("gnNiche").value.trim();
+  if (!niche) { $("gnNiche").focus(); return; }
+  const format = $("gnFormat").value;
+
+  const shuffled = [...FORMULAS].sort(() => Math.random() - 0.5);
+  const html = shuffled.map((f, i) => {
+    const hook = f.make(niche);
+    return `<div class="result-item" style="flex-direction:column;align-items:stretch;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="formula-badge">${f.name} · ${format}</span>
+        <div style="display:flex;gap:6px">
+          <button class="copy-btn" data-hook="${encodeURIComponent(hook)}" data-action="use">Usar este →</button>
+          <button class="copy-btn" data-hook="${encodeURIComponent(hook)}" data-action="copy">Copiar</button>
+        </div>
+      </div>
+      <span>${hook}</span>
+    </div>`;
+  }).join("");
+
+  $("gnResults").innerHTML = html;
+
+  $("gnResults").querySelectorAll(".copy-btn").forEach(b => {
+    b.addEventListener("click", async () => {
+      const hook = decodeURIComponent(b.dataset.hook);
+      if (b.dataset.action === "copy") {
+        try { await navigator.clipboard.writeText(hook); b.textContent = "✅"; setTimeout(() => b.textContent = "Copiar", 1500); } catch { alert(hook); }
+      } else {
+        $("gnSelectedHook").textContent = hook;
+        $("gnScriptSection").style.display = "block";
+        $("gnScriptOutput").style.display = "none";
+        $("gnScriptSection").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  });
+});
+
+$("gnScriptBtn").addEventListener("click", async () => {
+  const hook = $("gnSelectedHook").textContent.trim();
+  if (!hook) return;
+  const statusEl = $("gnAiStatus");
+  const btn = $("gnScriptBtn");
+  btn.disabled = true;
+
+  if (!GemmaEngine.isSupported()) {
+    statusEl.textContent = "Tu navegador no soporta WebGPU — usa Chrome/Edge 113+ para generar el guion.";
+    btn.disabled = false;
+    return;
+  }
+
+  const outEl = $("gnScriptOutput");
+  outEl.style.display = "block";
+  outEl.textContent = "Generando guion…";
+
+  try {
+    if (!engine.ready) {
+      statusEl.textContent = "Cargando modelo de IA en tu navegador…";
+      await engine.load((pct) => statusEl.textContent = `Cargando modelo de IA… ${Math.round(pct)}%`);
+    }
+    statusEl.textContent = "Escribiendo guion…";
+    const niche = $("gnNiche").value.trim();
+    const format = $("gnFormat").value;
+    const sys = `Eres guionista experto en contenido corto para redes sociales sobre "${niche}". A partir del siguiente hook, escribe un guion completo para un ${format} de 30-45 segundos: incluye el gancho inicial, el desarrollo en 3-4 puntos y un cierre con llamada a la acción. Responde en español, formato claro con saltos de línea.`;
+    const result = await engine.generate(sys, hook, (partial) => outEl.textContent = partial);
+    outEl.textContent = result.trim();
+    statusEl.textContent = "Guion generado ✅";
+  } catch (err) {
+    statusEl.textContent = "No se pudo cargar la IA: " + err.message;
+  }
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>

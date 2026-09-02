@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CotizaYa IA — Cotizaciones y contratos exprés para freelancers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/styles.css" />
+<style>
+  .total-box {
+    background: linear-gradient(135deg, rgba(99,102,241,.15), rgba(168,85,247,.15));
+    border: 1px solid var(--gem-1);
+    border-radius: var(--radius-sm);
+    padding: 18px; text-align: center; margin-top: 16px;
+  }
+  .total-box .amount { font-size: 30px; font-weight: 700; }
+  .total-box .lbl { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .05em; }
+  .tabs { display: flex; gap: 8px; margin-top: 20px; }
+  .tab-btn { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 16px; font-size: 13px; cursor: pointer; color: var(--text-dim); }
+  .tab-btn.active { border-color: var(--gem-1); color: var(--text); background: var(--surface-3); }
+  @media print { body * { visibility: hidden; } #docOutput, #docOutput * { visibility: visible; } #docOutput { position: absolute; top:0; left:0; width:100%; white-space: pre-wrap; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="../../index.html"><span class="gem-icon">🔮</span> Mini Apps IA</a>
+  <div class="nav-links">
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#demo">Probar</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <a class="btn btn-primary btn-sm" href="#demo">Crear cotización gratis</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Para freelancers, consultores y profesionales independientes</div>
+  <h1>Cotiza y formaliza en <span class="grad">minutos, no en horas</span></h1>
+  <p class="sub">Describe el proyecto, define tus horas y tarifa — obtén una cotización profesional y un contrato base listos para enviar y firmar.</p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn btn-primary">Crear mi cotización</a>
+    <a href="#precios" class="btn btn-ghost">Ver precios</a>
+  </div>
+</section>
+
+<section id="como-funciona" class="tight">
+  <div class="section-head">
+    <div class="kicker">El problema</div>
+    <h2>Cobrar mal empieza por no formalizar</h2>
+    <p>Muchos freelancers pierden dinero por no cotizar bien o por trabajar sin contrato.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="icon">🧮</div>
+      <h3>Cálculo automático</h3>
+      <p>Ingresa horas, tarifa y anticipo — el total y el cronograma de pagos se calculan solos.</p>
+    </div>
+    <div class="card">
+      <div class="icon">📄</div>
+      <h3>Contrato base incluido</h3>
+      <p>Cláusulas estándar de anticipo, plazos y propiedad intelectual, listas para adaptar.</p>
+    </div>
+    <div class="card">
+      <div class="icon">✨</div>
+      <h3>Redacción con IA</h3>
+      <p>Convierte una lista de tareas sueltas en una descripción de alcance profesional.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="section-head">
+    <div class="kicker">Pruébalo ahora</div>
+    <h2>Genera tu cotización y contrato</h2>
+  </div>
+
+  <div class="demo-panel">
+    <div class="demo-head">
+      <div class="status-dot ready"></div>
+      <span style="font-size:13px;color:var(--text-dim)">Herramienta gratuita — funciona 100% en tu navegador</span>
+    </div>
+    <div class="demo-body">
+
+      <div class="field-row">
+        <div>
+          <label for="qFreelancer">Tu nombre / negocio</label>
+          <input type="text" id="qFreelancer" placeholder="Ej. Juan Pérez — Diseño UX" />
+        </div>
+        <div>
+          <label for="qClient">Nombre del cliente</label>
+          <input type="text" id="qClient" placeholder="Ej. Panadería La Espiga" />
+        </div>
+      </div>
+
+      <label for="qScope">Alcance del proyecto (una idea por línea)</label>
+      <textarea id="qScope" placeholder="Ej.&#10;Diseño de logo&#10;3 propuestas de identidad visual&#10;Manual de marca en PDF">Diseño de logo
+3 propuestas de identidad visual
+Manual de marca en PDF</textarea>
+      <div class="chip-row">
+        <button class="chip" id="qPolishBtn" type="button">✨ Redactar alcance profesional con IA</button>
+      </div>
+
+      <div class="field-row">
+        <div>
+          <label for="qHours">Horas estimadas</label>
+          <input type="number" id="qHours" placeholder="20" value="20" />
+        </div>
+        <div>
+          <label for="qRate">Tarifa por hora (USD)</label>
+          <input type="number" id="qRate" placeholder="25" value="25" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div>
+          <label for="qDeposit">Anticipo (%)</label>
+          <input type="number" id="qDeposit" placeholder="50" value="50" />
+        </div>
+        <div>
+          <label for="qDays">Plazo de entrega (días)</label>
+          <input type="number" id="qDays" placeholder="15" value="15" />
+        </div>
+      </div>
+
+      <div class="total-box">
+        <div class="amount" id="qTotal">$500</div>
+        <div class="lbl">Total estimado del proyecto</div>
+      </div>
+
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" id="qGenerateBtn" type="button">Generar cotización y contrato</button>
+      </div>
+
+      <div class="tabs" id="qTabs" style="display:none">
+        <button class="tab-btn active" data-tab="quote">Cotización</button>
+        <button class="tab-btn" data-tab="contract">Contrato base</button>
+      </div>
+      <div class="output-box" id="docOutput" style="display:none"></div>
+      <div class="mk-actions" style="display:none;gap:10px;margin-top:14px" id="qActions">
+        <button class="btn btn-ghost btn-sm" id="qPrintBtn" type="button">🖨️ Exportar / Imprimir PDF</button>
+        <button class="btn btn-ghost btn-sm" id="qCopyBtn" type="button">📋 Copiar texto</button>
+      </div>
+      <p class="footer-note" id="qAiStatus"></p>
+    </div>
+  </div>
+</section>
+
+<section id="precios" class="tight">
+  <div class="section-head">
+    <div class="kicker">Precios</div>
+    <h2>Formaliza cada proyecto sin pagar a un abogado por cada uno</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <h3>Gratis</h3>
+      <div class="price">$0</div>
+      <div class="price-note">para siempre</div>
+      <ul>
+        <li>3 cotizaciones por mes</li>
+        <li>Contrato base genérico</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Empezar gratis</a>
+    </div>
+    <div class="plan featured">
+      <h3>Freelancer</h3>
+      <div class="price">$10<span>/mes</span></div>
+      <div class="price-note">facturación mensual</div>
+      <ul>
+        <li>Cotizaciones y contratos ilimitados</li>
+        <li>Redacción de alcance con IA</li>
+        <li>Exportar a PDF con tu logo</li>
+      </ul>
+      <a href="#demo" class="btn btn-primary">Empezar prueba</a>
+    </div>
+    <div class="plan">
+      <h3>Estudio</h3>
+      <div class="price">$25<span>/mes</span></div>
+      <div class="price-note">para equipos pequeños</div>
+      <ul>
+        <li>Todo lo de Freelancer</li>
+        <li>Hasta 5 usuarios</li>
+        <li>Plantillas de contrato por tipo de servicio</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Hablar con ventas</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>CotizaYa IA — parte de la suite Mini Apps IA. No sustituye asesoría legal profesional; revisa el contrato con un abogado antes de usarlo formalmente.</p>
+  <div style="margin-top:10px"><a href="../../index.html">← Volver al menú de mini apps</a></div>
+</footer>
+
+<script type="module">
+import { GemmaEngine } from "../shared/gemma-engine.js";
+
+const $ = (id) => document.getElementById(id);
+const engine = new GemmaEngine();
+let currentTab = "quote";
+let lastDocs = { quote: "", contract: "" };
+
+function calcTotal() {
+  const hours = Number($("qHours").value) || 0;
+  const rate = Number($("qRate").value) || 0;
+  return hours * rate;
+}
+
+function updateTotal() {
+  $("qTotal").textContent = "$" + calcTotal().toLocaleString("en-US");
+}
+
+["qHours", "qRate"].forEach(id => $(id).addEventListener("input", updateTotal));
+updateTotal();
+
+function buildQuote() {
+  const freelancer = $("qFreelancer").value.trim() || "[Tu nombre]";
+  const client = $("qClient").value.trim() || "[Nombre del cliente]";
+  const scopeLines = $("qScope").value.split("\n").map(l => l.trim()).filter(Boolean);
+  const hours = Number($("qHours").value) || 0;
+  const rate = Number($("qRate").value) || 0;
+  const total = hours * rate;
+  const deposit = Number($("qDeposit").value) || 0;
+  const days = Number($("qDays").value) || 0;
+  const depositAmount = Math.round(total * deposit / 100);
+  const balanceAmount = total - depositAmount;
+  const today = new Date().toLocaleDateString("es-ES");
+
+  return `COTIZACIÓN DE SERVICIOS
+Fecha: ${today}
+
+De: ${freelancer}
+Para: ${client}
+
+ALCANCE DEL PROYECTO
+${scopeLines.map(l => "- " + l).join("\n")}
+
+DETALLE
+Horas estimadas: ${hours} h
+Tarifa por hora: $${rate}
+Total del proyecto: $${total}
+
+CONDICIONES DE PAGO
+Anticipo (${deposit}%): $${depositAmount} — al aprobar esta cotización
+Saldo (${100-deposit}%): $${balanceAmount} — contra entrega final
+
+PLAZO DE ENTREGA
+${days} días hábiles a partir de la confirmación del anticipo.
+
+Esta cotización tiene una validez de 15 días a partir de la fecha indicada.`;
+}
+
+function buildContract() {
+  const freelancer = $("qFreelancer").value.trim() || "[Tu nombre]";
+  const client = $("qClient").value.trim() || "[Nombre del cliente]";
+  const scopeLines = $("qScope").value.split("\n").map(l => l.trim()).filter(Boolean);
+  const total = calcTotal();
+  const deposit = Number($("qDeposit").value) || 0;
+  const days = Number($("qDays").value) || 0;
+  const today = new Date().toLocaleDateString("es-ES");
+
+  return `CONTRATO DE PRESTACIÓN DE SERVICIOS
+
+Entre ${freelancer} ("el Prestador") y ${client} ("el Cliente"), celebrado el ${today}, se acuerda lo siguiente:
+
+1. OBJETO
+El Prestador se compromete a realizar los siguientes servicios para el Cliente:
+${scopeLines.map(l => "   - " + l).join("\n")}
+
+2. PLAZO
+El Prestador entregará el trabajo en un plazo de ${days} días hábiles desde la confirmación del anticipo.
+
+3. HONORARIOS Y FORMA DE PAGO
+El valor total del servicio es de $${total}. Se pagará un anticipo del ${deposit}% al inicio y el saldo restante contra entrega final del trabajo, antes de la entrega de archivos finales editables.
+
+4. PROPIEDAD INTELECTUAL
+La propiedad intelectual del trabajo se transferirá al Cliente una vez recibido el pago completo. El Prestador podrá usar el trabajo en su portafolio salvo acuerdo de confidencialidad en contrario.
+
+5. REVISIONES
+El precio incluye hasta 2 rondas de revisión sobre el alcance acordado. Cambios adicionales o fuera de alcance se cotizarán por separado.
+
+6. CANCELACIÓN
+Si el Cliente cancela el proyecto ya iniciado, el anticipo no es reembolsable y se facturará el trabajo avanzado a la fecha de cancelación.
+
+Firma del Prestador: _______________________
+Firma del Cliente: _______________________
+
+[Este es un contrato base de referencia. Se recomienda revisión legal antes de su uso formal.]`;
+}
+
+function renderDoc() {
+  lastDocs.quote = buildQuote();
+  lastDocs.contract = buildContract();
+  $("docOutput").textContent = lastDocs[currentTab];
+  $("docOutput").style.display = "block";
+  $("qTabs").style.display = "flex";
+  $("qActions").style.display = "flex";
+}
+
+$("qGenerateBtn").addEventListener("click", renderDoc);
+
+$("qTabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".tab-btn");
+  if (!btn) return;
+  currentTab = btn.dataset.tab;
+  document.querySelectorAll("#qTabs .tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+  $("docOutput").textContent = lastDocs[currentTab];
+});
+
+$("qPrintBtn").addEventListener("click", () => window.print());
+
+$("qCopyBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("docOutput").textContent);
+    $("qCopyBtn").textContent = "✅ Copiado";
+    setTimeout(() => $("qCopyBtn").textContent = "📋 Copiar texto", 1800);
+  } catch { alert($("docOutput").textContent); }
+});
+
+$("qPolishBtn").addEventListener("click", async () => {
+  const raw = $("qScope").value.trim();
+  if (!raw) { $("qScope").focus(); return; }
+  const statusEl = $("qAiStatus");
+  const btn = $("qPolishBtn");
+  btn.disabled = true;
+
+  if (!GemmaEngine.isSupported()) {
+    statusEl.textContent = "Tu navegador no soporta WebGPU — usa Chrome/Edge 113+ para la redacción con IA.";
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+    if (!engine.ready) {
+      statusEl.textContent = "Cargando modelo de IA en tu navegador…";
+      await engine.load((pct) => statusEl.textContent = `Cargando modelo de IA… ${Math.round(pct)}%`);
+    }
+    statusEl.textContent = "Redactando alcance profesional…";
+    const sys = `Eres un consultor que redacta alcances de proyecto para cotizaciones. Convierte la siguiente lista de tareas sueltas en una lista de 3 a 6 líneas, cada una describiendo un entregable claro y profesional, en español. Responde solo con las líneas, una por renglón, sin numeración ni explicaciones.`;
+    const result = await engine.generate(sys, raw, (partial) => $("qScope").value = partial);
+    $("qScope").value = result.trim();
+    statusEl.textContent = "Alcance redactado ✅";
+  } catch (err) {
+    statusEl.textContent = "No se pudo cargar la IA: " + err.message;
+  }
+  btn.disabled = false;
+});
+</script>
+</body>
+</html>

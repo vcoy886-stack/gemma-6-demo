@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panadería La Espiga — sitio de ejemplo con ChatIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #fffaf3; color: #3a2c1d; }
+  header { background: #b45309; color: #fff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; }
+  header .logo { font-weight: 700; font-size: 20px; }
+  header nav a { color: #ffedd5; text-decoration: none; margin-left: 24px; font-size: 14px; }
+  .hero { padding: 80px 32px; text-align: center; background: linear-gradient(180deg, #fef3e2, #fffaf3); }
+  .hero h1 { font-size: 36px; margin-bottom: 14px; }
+  .hero p { color: #7c6a53; max-width: 480px; margin: 0 auto; }
+  .banner {
+    max-width: 760px; margin: 0 auto 0; background: #fff7ed; border: 1px solid #fdba74;
+    border-radius: 12px; padding: 16px 22px; font-size: 13.5px; color: #9a3412;
+  }
+  .products { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; max-width: 900px; margin: 60px auto; padding: 0 32px; }
+  .product { background: #fff; border: 1px solid #f2e4d0; border-radius: 14px; padding: 22px; text-align: center; }
+  .product .emoji { font-size: 36px; margin-bottom: 10px; }
+  .product h3 { font-size: 16px; margin-bottom: 6px; }
+  .product p { color: #7c6a53; font-size: 13.5px; }
+  footer { text-align: center; padding: 40px; color: #a5906f; font-size: 13px; }
+  footer a { color: #b45309; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🥖 Panadería La Espiga</div>
+  <nav>
+    <a href="#">Inicio</a>
+    <a href="#">Productos</a>
+    <a href="#">Contacto</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Pan artesanal todos los días, recién horneado</h1>
+  <p>Este es un sitio de ejemplo (ficticio) para mostrar cómo se ve ChatIA Embebible instalado con una sola línea de código.</p>
+</div>
+
+<div class="banner">
+  💡 Este sitio no es real — es una demostración de <strong>ChatIA Embebible</strong> instalado
+  con este código, tal cual lo pegaría el dueño del negocio:
+  <br><code>&lt;script src="widget.js" data-business="Panadería La Espiga" data-context="..."&gt;&lt;/script&gt;</code>
+  <br>Haz clic en la burbuja 💬 abajo a la derecha para hablar con el asistente del negocio.
+</div>
+
+<div class="products">
+  <div class="product"><div class="emoji">🥐</div><h3>Croissants</h3><p>Recién horneados cada mañana, mantequilla 100% natural.</p></div>
+  <div class="product"><div class="emoji">🎂</div><h3>Pasteles personalizados</h3><p>Para cumpleaños y eventos, con 3 días de anticipación.</p></div>
+  <div class="product"><div class="emoji">🍞</div><h3>Pan de masa madre</h3><p>Fermentación de 24 horas, sin conservantes.</p></div>
+</div>
+
+<footer>
+  Sitio de ejemplo para la demo de ChatIA Embebible · <a href="index.html">← Volver a la landing de ChatIA</a>
+</footer>
+
+<script
+  src="widget.js"
+  data-business="Panadería La Espiga"
+  data-accent="#b45309"
+  data-context="Horario: lunes a sábado de 7am a 8pm, domingos cerrado. Hacemos pasteles personalizados con 3 días de anticipación. Envíos gratis en pedidos mayores a $30. Aceptamos pagos en efectivo y transferencia. Dirección: Av. Principal 123.">
+</script>
+</body>
+</html>

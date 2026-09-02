@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mini Apps IA — Herramientas para creadores, profesionales y pymes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="mini-apps/shared/styles.css" />
+<style>
+  .apps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; max-width: var(--max-w); margin: 0 auto; }
+  .app-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; display: flex; flex-direction: column; text-decoration: none; color: var(--text);
+    transition: border-color .2s, transform .15s;
+  }
+  .app-card:hover { border-color: var(--gem-1); transform: translateY(-2px); }
+  .app-card .num { font-family: var(--font-mono); font-size: 12px; color: var(--gem-3); margin-bottom: 10px; }
+  .app-card .emoji { font-size: 30px; margin-bottom: 12px; }
+  .app-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .app-card p.pain { font-size: 13.5px; color: var(--text-dim); margin-bottom: 14px; flex: 1; }
+  .app-card .meta { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; border-top: 1px solid var(--border); padding-top: 14px; margin-top: auto; }
+  .app-card .price-tag { color: var(--text); font-weight: 600; }
+  .app-card .audience { color: var(--text-muted); }
+  @media (max-width: 720px) { .apps-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="index.html"><span class="gem-icon">🔮</span> Mini Apps IA</a>
+  <div class="nav-links">
+    <a href="#apps">Las 5 apps</a>
+    <a href="index (5).html">Demo Gemma Chat</a>
+  </div>
+  <a class="btn btn-primary btn-sm" href="#apps">Explorar</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Suite de mini apps de IA lista para vender</div>
+  <h1>5 herramientas de IA para <span class="grad">profesionales, influencers y pymes</span></h1>
+  <p class="sub">Cada una resuelve un dolor puntual, es funcional desde ya y está pensada para venderse por suscripción mensual a través de su propia landing page.</p>
+  <div class="hero-cta">
+    <a href="#apps" class="btn btn-primary">Ver las 5 mini apps</a>
+  </div>
+</section>
+
+<section id="apps" class="tight">
+  <div class="apps-grid">
+
+    <a class="app-card" href="mini-apps/1-media-kit/index.html">
+      <div class="num">01</div>
+      <div class="emoji">📊</div>
+      <h3>MediaKit IA</h3>
+      <p class="pain">Genera media kits profesionales para influencers en minutos, con bio pulida por IA y exportación a PDF.</p>
+      <div class="meta"><span class="audience">Influencers</span><span class="price-tag">desde $9/mes</span></div>
+    </a>
+
+    <a class="app-card" href="mini-apps/2-respondedor-dm/index.html">
+      <div class="num">02</div>
+      <div class="emoji">💬</div>
+      <h3>RespondeYa IA</h3>
+      <p class="pain">Clasifica DMs y comentarios (precio, horario, disponibilidad, queja) y sugiere la respuesta lista para enviar.</p>
+      <div class="meta"><span class="audience">Pymes</span><span class="price-tag">desde $15/mes</span></div>
+    </a>
+
+    <a class="app-card" href="mini-apps/3-generador-guiones/index.html">
+      <div class="num">03</div>
+      <div class="emoji">🎬</div>
+      <h3>GuionIA</h3>
+      <p class="pain">Genera 10 hooks y guiones para Reels/TikTok al instante, basados en fórmulas de copywriting probadas.</p>
+      <div class="meta"><span class="audience">Creadores</span><span class="price-tag">desde $12/mes</span></div>
+    </a>
+
+    <a class="app-card" href="mini-apps/4-cotizador-contratos/index.html">
+      <div class="num">04</div>
+      <div class="emoji">📄</div>
+      <h3>CotizaYa IA</h3>
+      <p class="pain">Calcula la cotización de un proyecto y genera cotización + contrato base listos para enviar y firmar.</p>
+      <div class="meta"><span class="audience">Freelancers</span><span class="price-tag">desde $10/mes</span></div>
+    </a>
+
+    <a class="app-card" href="mini-apps/5-chatbot-embebible/index.html">
+      <div class="num">05</div>
+      <div class="emoji">🤖</div>
+      <h3>ChatIA Embebible</h3>
+      <p class="pain">Chatbot de atención al cliente que corre en el navegador del visitante (WebGPU) — sin costo de API por conversación.</p>
+      <div class="meta"><span class="audience">Pymes</span><span class="price-tag">desde $19/mes</span></div>
+    </a>
+
+    <a class="app-card" href="index (5).html">
+      <div class="num">DEMO</div>
+      <div class="emoji">🔮</div>
+      <h3>Gemma 4 E2B Chat</h3>
+      <p class="pain">El demo original del repo: chat completo con Gemma corriendo 100% en el navegador. Motor base de toda la suite.</p>
+      <div class="meta"><span class="audience">Referencia técnica</span><span class="price-tag">—</span></div>
+    </a>
+
+  </div>
+</section>
+
+<section class="tight">
+  <div class="section-head">
+    <div class="kicker">Cómo funciona la suite</div>
+    <h2>Todas comparten el mismo motor de IA gratuito</h2>
+    <p>Las 5 usan el mismo modelo Gemma corriendo en el navegador (WebGPU) para las funciones de IA — sin API keys, sin costo por uso, sin backend que mantener.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="icon">⚙️</div>
+      <h3>Funcionales hoy mismo</h3>
+      <p>Cada mini app ya tiene su herramienta funcionando dentro de la misma landing — no son solo mockups.</p>
+    </div>
+    <div class="card">
+      <div class="icon">💳</div>
+      <h3>Listas para monetizar</h3>
+      <p>Cada landing incluye su propuesta de precios en modelo de suscripción mensual, lista para conectar una pasarela de pago.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>Fáciles de publicar</h3>
+      <p>Son HTML/CSS/JS puro — se pueden publicar en cualquier hosting estático y personalizar con marca propia.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Mini Apps IA — construidas sobre el demo Gemma 4 E2B de este repositorio</p>
+</footer>
+
+</body>
+</html>

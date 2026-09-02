@@ -1,0 +1,7 @@
+{
+  "name": "mini-apps-payments-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend mínimo (2 funciones serverless) para cobrar con Wompi en las 5 mini apps.",
+  "license": "UNLICENSED"
+}

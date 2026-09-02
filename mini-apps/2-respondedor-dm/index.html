@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RespondeYa IA — Respuestas automáticas para DMs y comentarios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 100px; padding: 4px 12px; font-size: 12px; color: var(--text-dim);
+  }
+  .tag.precio { border-color: var(--gem-1); color: var(--gem-1); }
+  .tag.horario { border-color: var(--gem-3); color: var(--gem-3); }
+  .tag.disponibilidad { border-color: var(--gem-2); color: var(--gem-2); }
+  .tag.queja { border-color: var(--danger); color: var(--danger); }
+  .tag.general { border-color: var(--text-muted); color: var(--text-muted); }
+  .reply-suggestion { margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="../../index.html"><span class="gem-icon">🔮</span> Mini Apps IA</a>
+  <div class="nav-links">
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#demo">Probar</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <a class="btn btn-primary btn-sm" href="#demo">Probar gratis</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Para pymes e infoproductores</div>
+  <h1>Responde <span class="grad">DMs y comentarios</span> en segundos, no en horas</h1>
+  <p class="sub">La IA clasifica cada mensaje (precio, horario, disponibilidad, queja...) y te sugiere la respuesta lista para enviar, con el tono de tu negocio.</p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn btn-primary">Probar gratis</a>
+    <a href="#precios" class="btn btn-ghost">Ver precios</a>
+  </div>
+</section>
+
+<section id="como-funciona" class="tight">
+  <div class="section-head">
+    <div class="kicker">El problema</div>
+    <h2>Cada mensaje sin responder es una venta que se enfría</h2>
+    <p>Los negocios pequeños pierden clientes porque tardan horas (o días) en responder preguntas repetitivas.</p>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="icon">🏷️</div>
+      <h3>Clasificación automática</h3>
+      <p>Detecta si preguntan precio, horario, disponibilidad o si es una queja — para priorizar lo urgente.</p>
+    </div>
+    <div class="card">
+      <div class="icon">💬</div>
+      <h3>Respuesta lista para enviar</h3>
+      <p>Genera la respuesta con tus plantillas y el tono de tu marca, en un clic para copiar y pegar.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧠</div>
+      <h3>IA para casos no previstos</h3>
+      <p>Cuando el mensaje no encaja en ninguna plantilla, la IA on-device redacta una respuesta a la medida.</p>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="section-head">
+    <div class="kicker">Pruébalo ahora</div>
+    <h2>Simula un mensaje de un cliente</h2>
+    <p>Configura tu negocio una vez, luego pega cualquier mensaje entrante.</p>
+  </div>
+
+  <div class="demo-panel">
+    <div class="demo-head">
+      <div class="status-dot ready"></div>
+      <span style="font-size:13px;color:var(--text-dim)">Herramienta gratuita — funciona 100% en tu navegador</span>
+    </div>
+    <div class="demo-body">
+
+      <label for="rdBusiness">Nombre de tu negocio</label>
+      <input type="text" id="rdBusiness" placeholder="Ej. Estudio Fit Camila" />
+
+      <label for="rdTone">Tono de respuesta</label>
+      <select id="rdTone">
+        <option value="cercano">Cercano y casual</option>
+        <option value="formal">Formal y profesional</option>
+        <option value="divertido">Divertido / con emojis</option>
+      </select>
+
+      <div class="field-row">
+        <div>
+          <label for="rdPrecio">Respuesta a "precio"</label>
+          <textarea id="rdPrecio" placeholder="Ej. Nuestro plan mensual cuesta $50, incluye...">¡Hola! Nuestro plan mensual cuesta $50 e incluye acceso completo. ¿Te cuento más detalles?</textarea>
+        </div>
+        <div>
+          <label for="rdHorario">Respuesta a "horario"</label>
+          <textarea id="rdHorario" placeholder="Ej. Atendemos de lunes a sábado...">Atendemos de lunes a sábado de 8am a 8pm. ¡Te esperamos!</textarea>
+        </div>
+      </div>
+      <div class="field-row">
+        <div>
+          <label for="rdDisponibilidad">Respuesta a "disponibilidad"</label>
+          <textarea id="rdDisponibilidad" placeholder="Ej. Sí tenemos cupo esta semana...">Sí, tenemos disponibilidad esta semana. ¿Qué día te queda mejor?</textarea>
+        </div>
+        <div>
+          <label for="rdQueja">Respuesta a "queja"</label>
+          <textarea id="rdQueja" placeholder="Ej. Lamentamos el inconveniente...">Lamentamos mucho el inconveniente. Un miembro del equipo te va a contactar hoy mismo para resolverlo.</textarea>
+        </div>
+      </div>
+
+      <label for="rdIncoming">Mensaje entrante del cliente (simulado)</label>
+      <textarea id="rdIncoming" placeholder="Ej. hola, cuanto cuesta el plan y tienen cupo esta semana?"></textarea>
+      <div class="chip-row">
+        <button class="chip" data-msg="Hola! cuánto cuesta el plan mensual?">precio</button>
+        <button class="chip" data-msg="A qué hora abren los sábados?">horario</button>
+        <button class="chip" data-msg="Tienen cupo disponible para esta semana?">disponibilidad</button>
+        <button class="chip" data-msg="Muy mal servicio, nadie me atendió ayer">queja</button>
+        <button class="chip" data-msg="Hacen envíos a Medellín?">caso no previsto</button>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="rdAnalyzeBtn" type="button">Analizar y sugerir respuesta</button>
+        <button class="btn btn-ghost" id="rdAiBtn" type="button">✨ Redactar con IA on-device</button>
+      </div>
+
+      <div id="rdResult" class="reply-suggestion"></div>
+      <p class="footer-note" id="rdAiStatus"></p>
+    </div>
+  </div>
+</section>
+
+<section id="precios" class="tight">
+  <div class="section-head">
+    <div class="kicker">Precios</div>
+    <h2>Precio según el volumen de mensajes que manejas</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <h3>Starter</h3>
+      <div class="price">$15<span>/mes</span></div>
+      <div class="price-note">hasta 300 mensajes/mes</div>
+      <ul>
+        <li>4 categorías de respuesta</li>
+        <li>1 negocio / marca</li>
+        <li>Clasificación automática</li>
+      </ul>
+      <button type="button" class="btn btn-ghost js-wompi-pay" data-plan="Starter" data-cop="60000">Suscribirme — $15/mes</button>
+    </div>
+    <div class="plan featured">
+      <h3>Pro</h3>
+      <div class="price">$29<span>/mes</span></div>
+      <div class="price-note">hasta 1.500 mensajes/mes</div>
+      <ul>
+        <li>Categorías ilimitadas</li>
+        <li>Redacción con IA para casos no previstos</li>
+        <li>Integración con Instagram/WhatsApp*</li>
+      </ul>
+      <button type="button" class="btn btn-primary js-wompi-pay" data-plan="Pro" data-cop="116000">Suscribirme — $29/mes</button>
+    </div>
+    <div class="plan">
+      <h3>Business</h3>
+      <div class="price">$49<span>/mes</span></div>
+      <div class="price-note">mensajes ilimitados</div>
+      <ul>
+        <li>Todo lo de Pro</li>
+        <li>Hasta 5 negocios/marcas</li>
+        <li>Soporte prioritario</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Hablar con ventas</a>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:18px">*Integración directa con APIs de Meta/WhatsApp Business se activa en la fase de implementación con el cliente.</p>
+</section>
+
+<footer>
+  <p>RespondeYa IA — parte de la suite Mini Apps IA</p>
+  <div style="margin-top:10px"><a href="../../index.html">← Volver al menú de mini apps</a></div>
+</footer>
+
+<script type="module">
+import { GemmaEngine } from "./gemma-engine.js";
+
+const $ = (id) => document.getElementById(id);
+const engine = new GemmaEngine();
+
+const KEYWORDS = {
+  precio: ["precio", "cuesta", "cuánto", "cuanto", "vale", "costo", "tarifa"],
+  horario: ["horario", "hora", "abren", "cierran", "atienden"],
+  disponibilidad: ["cupo", "disponib", "espacio", "lugar", "reserva"],
+  queja: ["mal", "queja", "reclamo", "molesto", "problema", "nadie me atendió", "nunca llegó", "pésimo", "pesimo"],
+};
+
+function classify(text) {
+  const t = text.toLowerCase();
+  for (const [cat, words] of Object.entries(KEYWORDS)) {
+    if (words.some(w => t.includes(w))) return cat;
+  }
+  return "general";
+}
+
+document.querySelectorAll(".chip[data-msg]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    $("rdIncoming").value = btn.dataset.msg;
+    document.getElementById("rdAnalyzeBtn").click();
+  });
+});
+
+$("rdAnalyzeBtn").addEventListener("click", () => {
+  const msg = $("rdIncoming").value.trim();
+  const resultEl = $("rdResult");
+  if (!msg) { $("rdIncoming").focus(); return; }
+
+  const cat = classify(msg);
+  const templates = {
+    precio: $("rdPrecio").value,
+    horario: $("rdHorario").value,
+    disponibilidad: $("rdDisponibilidad").value,
+    queja: $("rdQueja").value,
+  };
+
+  const labelMap = { precio: "💰 Pregunta de precio", horario: "🕒 Pregunta de horario", disponibilidad: "📅 Pregunta de disponibilidad", queja: "⚠️ Posible queja", general: "❓ No coincide con ninguna plantilla" };
+
+  let bodyHtml;
+  if (cat === "general") {
+    bodyHtml = `<div class="output-box empty">Este mensaje no coincide con tus plantillas configuradas. Usa "Redactar con IA on-device" para generar una respuesta a la medida.</div>`;
+  } else {
+    bodyHtml = `<div class="result-item"><span>${templates[cat]}</span><button class="copy-btn" data-copy="${encodeURIComponent(templates[cat])}">Copiar</button></div>`;
+  }
+
+  resultEl.innerHTML = `<span class="tag ${cat}">${labelMap[cat]}</span>${bodyHtml}`;
+
+  resultEl.querySelectorAll(".copy-btn").forEach(b => {
+    b.addEventListener("click", async () => {
+      const text = decodeURIComponent(b.dataset.copy);
+      try { await navigator.clipboard.writeText(text); b.textContent = "✅"; setTimeout(() => b.textContent = "Copiar", 1500); }
+      catch { alert(text); }
+    });
+  });
+});
+
+$("rdAiBtn").addEventListener("click", async () => {
+  const msg = $("rdIncoming").value.trim();
+  if (!msg) { $("rdIncoming").focus(); return; }
+
+  const statusEl = $("rdAiStatus");
+  const btn = $("rdAiBtn");
+  btn.disabled = true;
+
+  if (!GemmaEngine.isSupported()) {
+    statusEl.textContent = "Tu navegador no soporta WebGPU — usa Chrome/Edge 113+ para la redacción con IA.";
+    btn.disabled = false;
+    return;
+  }
+
+  const resultEl = $("rdResult");
+  resultEl.innerHTML = `<div class="output-box">Redactando…</div>`;
+
+  try {
+    if (!engine.ready) {
+      statusEl.textContent = "Cargando modelo de IA en tu navegador…";
+      await engine.load((pct) => statusEl.textContent = `Cargando modelo de IA… ${Math.round(pct)}%`);
+    }
+    statusEl.textContent = "Generando respuesta…";
+    const business = $("rdBusiness").value.trim() || "el negocio";
+    const tone = $("rdTone").value;
+    const sys = `Eres el asistente de atención al cliente de "${business}". Responde en español, tono ${tone}, en máximo 3 frases, al siguiente mensaje de un cliente. Responde solo con el mensaje final para enviar, sin explicaciones.`;
+    const box = resultEl.querySelector(".output-box");
+    const result = await engine.generate(sys, msg, (partial) => { if (box) box.textContent = partial; });
+    resultEl.innerHTML = `<div class="result-item"><span>${result.trim()}</span><button class="copy-btn" data-copy="${encodeURIComponent(result.trim())}">Copiar</button></div>`;
+    resultEl.querySelector(".copy-btn").addEventListener("click", async (e) => {
+      try { await navigator.clipboard.writeText(result.trim()); e.target.textContent = "✅"; } catch {}
+    });
+    statusEl.textContent = "Respuesta generada ✅";
+  } catch (err) {
+    statusEl.textContent = "No se pudo cargar la IA: " + err.message;
+  }
+  btn.disabled = false;
+});
+</script>
+<script src="wompi-checkout.js"></script>
+</body>
+</html>

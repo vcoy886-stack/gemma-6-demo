@@ -112,7 +112,7 @@ Dirección: Av. Principal 123.</textarea>
         <li>Personalizable con tu FAQ</li>
         <li>Instalación con 1 línea de código</li>
       </ul>
-      <a href="#demo" class="btn btn-ghost">Empezar</a>
+      <button type="button" class="btn btn-ghost js-wompi-pay" data-plan="Starter" data-cop="76000">Suscribirme — $19/mes</button>
     </div>
     <div class="plan featured">
       <h3>Negocio</h3>
@@ -123,7 +123,7 @@ Dirección: Av. Principal 123.</textarea>
         <li>Colores y logo personalizados</li>
         <li>Actualiza el FAQ cuando quieras</li>
       </ul>
-      <a href="#demo" class="btn btn-primary">Empezar prueba</a>
+      <button type="button" class="btn btn-primary js-wompi-pay" data-plan="Negocio" data-cop="156000">Suscribirme — $39/mes</button>
     </div>
     <div class="plan">
       <h3>Agencia</h3>
@@ -183,5 +183,6 @@ document.getElementById("cbTryBtn").addEventListener("click", () => {
   document.getElementById("cbStatus").textContent = "Chatbot cargado — mira la burbuja 💬 abajo a la derecha.";
 });
 </script>
+<script src="wompi-checkout.js"></script>
 </body>
 </html>

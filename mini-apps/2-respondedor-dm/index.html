@@ -150,7 +150,7 @@
         <li>1 negocio / marca</li>
         <li>Clasificación automática</li>
       </ul>
-      <a href="#demo" class="btn btn-ghost">Empezar</a>
+      <button type="button" class="btn btn-ghost js-wompi-pay" data-plan="Starter" data-cop="60000">Suscribirme — $15/mes</button>
     </div>
     <div class="plan featured">
       <h3>Pro</h3>
@@ -161,7 +161,7 @@
         <li>Redacción con IA para casos no previstos</li>
         <li>Integración con Instagram/WhatsApp*</li>
       </ul>
-      <a href="#demo" class="btn btn-primary">Empezar prueba Pro</a>
+      <button type="button" class="btn btn-primary js-wompi-pay" data-plan="Pro" data-cop="116000">Suscribirme — $29/mes</button>
     </div>
     <div class="plan">
       <h3>Business</h3>
@@ -283,5 +283,6 @@ $("rdAiBtn").addEventListener("click", async () => {
   btn.disabled = false;
 });
 </script>
+<script src="wompi-checkout.js"></script>
 </body>
 </html>

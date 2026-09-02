@@ -11,7 +11,7 @@
   const business = scriptTag.dataset.business || "Nuestro negocio";
   const context = scriptTag.dataset.context || "";
   const accent = scriptTag.dataset.accent || "#6366f1";
-  const engineUrl = new URL("../shared/gemma-engine.js", scriptTag.src).href;
+  const engineUrl = new URL("./gemma-engine.js", scriptTag.src).href;
 
   const uid = "gcw-" + Math.random().toString(36).slice(2, 9);
 

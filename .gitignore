@@ -1,0 +1,3 @@
+# Datos de prueba local (cuentas, créditos) — nunca se versionan.
+# En producción esta carpeta vive en el servidor, un nivel fuera de public_html.
+finanzas_datos/

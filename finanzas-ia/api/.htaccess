@@ -1,0 +1,6 @@
+# Protege los archivos internos: solo los endpoints (registro.php, login.php,
+# yo.php, analizar.php, checkout.php, cancelar.php, logout.php, webhook.php,
+# modulos.php) deben ser accesibles directamente.
+<FilesMatch "^(common|gemini)\.php$">
+  Require all denied
+</FilesMatch>

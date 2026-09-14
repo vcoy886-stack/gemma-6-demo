@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sistema de Ganancias — COP · VES · USD</title>
+<title>Cambio de Divisas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -645,17 +645,38 @@ document.getElementById("btnClearLedger").addEventListener("click", () => {
   renderAll();
 });
 
-document.getElementById("btnExport").addEventListener("click", () => {
+document.getElementById("btnExport").addEventListener("click", async () => {
   if (state.ledger.length === 0) { toast("No hay operaciones para exportar"); return; }
   const header = "fecha,entrega_moneda,entrega_monto,recibe_moneda,recibe_monto,ruta,puente,ganancia_usd\n";
   const rows = state.ledger.map(e =>
     [new Date(e.ts).toISOString(), e.giveCur, e.giveAmt, e.getCur, e.getAmt, e.route, e.bridge || "", e.profitUSD.toFixed(2)].join(",")
   ).join("\n");
   const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
+  const filename = "operaciones_cambio_divisas.csv";
+
+  // Inside the Artifact viewer, a plain <a download> is inert — route through
+  // the downloads capability instead. Outside it (opened as a normal file),
+  // window.claude is undefined and we fall back to the classic anchor click.
+  if (window.claude && typeof window.claude.use === "function") {
+    try {
+      const downloads = await window.claude.use("downloads");
+      if (downloads) {
+        try {
+          await downloads.save({ filename, data: blob });
+          toast("CSV descargado");
+        } catch (err) {
+          if (err && err.code === "declined") return;
+          toast("No se pudo exportar: " + (err && err.message ? err.message : "error"));
+        }
+        return;
+      }
+    } catch (e) { /* fall through to anchor download */ }
+  }
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "operaciones_cambio_divisas.csv";
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
 });

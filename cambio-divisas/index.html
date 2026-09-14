@@ -200,11 +200,12 @@
           <select id="opTo"><option value="USD">USD — Dólar</option><option value="COP">COP — Peso colombiano</option><option value="VES">VES — Bolívar</option></select>
         </div>
       </div>
-      <div class="field" id="routeField" style="margin-top:12px; display:none">
-        <label>Ruta de ejecución interna</label>
+      <div class="field" id="routeField" style="margin-top:12px">
+        <label>Método</label>
         <select id="opRoute">
-          <option value="directo">Directa (COP↔VES)</option>
-          <option value="via_usd">Vía USD (2 pasos internos)</option>
+          <option value="auto">Automático — usa el método más rentable</option>
+          <option value="directo">Forzar intercambio directo</option>
+          <option value="via">Forzar arbitraje (vía tercera moneda)</option>
         </select>
       </div>
       <div class="result-box" id="opResult"></div>
@@ -218,27 +219,8 @@
   <div class="panel" id="panel-fuga">
     <div class="card">
       <h2>Detector de fuga triangular</h2>
-      <p class="sub">Compara tu tasa directa COP↔VES contra la tasa cruzada que resultaría de pasar por USD con tus propias tasas. Si la ruta cruzada da más, un cliente listo puede "romper" tu tasa directa haciendo dos operaciones en vez de una — y tú pierdes margen.</p>
-      <div class="grid2">
-        <div class="card leak-card" id="leakCard1" style="margin-bottom:0">
-          <h2 style="font-size:13px">Cliente entrega COP → recibe VES</h2>
-          <div class="flow">Notional: <b>1,000,000 COP</b></div>
-          <div class="result-line"><span>Ruta directa (COP→VES)</span><span id="leak1_direct"></span></div>
-          <div class="result-line"><span>Ruta vía USD (COP→USD→VES)</span><span id="leak1_via"></span></div>
-          <div class="result-line"><span>Diferencia</span><span id="leak1_diff"></span></div>
-          <div style="margin-top:10px" id="leak1_badge"></div>
-          <p class="hint" id="leak1_fix"></p>
-        </div>
-        <div class="card leak-card" id="leakCard2" style="margin-bottom:0">
-          <h2 style="font-size:13px">Cliente entrega VES → recibe COP</h2>
-          <div class="flow">Notional: <b>2,000,000 VES</b></div>
-          <div class="result-line"><span>Ruta directa (VES→COP)</span><span id="leak2_direct"></span></div>
-          <div class="result-line"><span>Ruta vía USD (VES→USD→COP)</span><span id="leak2_via"></span></div>
-          <div class="result-line"><span>Diferencia</span><span id="leak2_diff"></span></div>
-          <div style="margin-top:10px" id="leak2_badge"></div>
-          <p class="hint" id="leak2_fix"></p>
-        </div>
-      </div>
+      <p class="sub">Para cada par, compara tu tasa directa contra la tasa cruzada que resultaría de pasar por la tercera moneda con tus propias tasas. Si la ruta cruzada da más, un cliente listo puede "romper" tu tasa directa haciendo dos operaciones en vez de una — y tú pierdes margen. Cubre las 6 direcciones posibles entre COP, VES y USD.</p>
+      <div class="grid3" id="leakGrid"></div>
     </div>
   </div>
 
@@ -381,30 +363,47 @@ function toast(msg) {
 
 // business rule: client gives `amount` of fromCur, receives computed amount of toCur
 // using the business's own direct posted rates (business always favorable side)
+const CURRENCIES = ["COP", "VES", "USD"];
+const PAIR_DEF = {
+  usdcop: { base: "USD", quoted: "COP", label: "USD/COP" },
+  usdves: { base: "USD", quoted: "VES", label: "USD/VES" },
+  copves: { base: "COP", quoted: "VES", label: "COP/VES" }
+};
+
+function findPairKey(a, b) {
+  for (const [key, def] of Object.entries(PAIR_DEF)) {
+    if ((def.base === a && def.quoted === b) || (def.base === b && def.quoted === a)) return key;
+  }
+  return null;
+}
+
 function convertDirect(amount, fromCur, toCur) {
-  const r = state.rates;
   if (fromCur === toCur) return amount;
-  if (fromCur === "USD" && toCur === "COP") return amount * r.usdcop.buy;
-  if (fromCur === "COP" && toCur === "USD") return amount / r.usdcop.sell;
-  if (fromCur === "USD" && toCur === "VES") return amount * r.usdves.buy;
-  if (fromCur === "VES" && toCur === "USD") return amount / r.usdves.sell;
-  if (fromCur === "COP" && toCur === "VES") return amount * r.copves.buy;
-  if (fromCur === "VES" && toCur === "COP") return amount / r.copves.sell;
-  return NaN;
+  const pairKey = findPairKey(fromCur, toCur);
+  if (!pairKey) return NaN;
+  const def = PAIR_DEF[pairKey], r = state.rates[pairKey];
+  return fromCur === def.base ? amount * r.buy : amount / r.sell;
 }
 
-// COP -> VES going through USD (two internal legs)
-function copToVesViaUsd(amountCOP) {
-  const r = state.rates;
-  const usdAmt = amountCOP / r.usdcop.sell;   // leg 1: business sells USD
-  return usdAmt * r.usdves.buy;               // leg 2: business buys USD
+// which rate field (buy/sell) drives convertDirect(from -> to), for fix suggestions
+function directSide(fromCur, toCur) {
+  const pairKey = findPairKey(fromCur, toCur);
+  const def = PAIR_DEF[pairKey];
+  return { pairKey, side: fromCur === def.base ? "buy" : "sell" };
 }
 
-// VES -> COP going through USD (two internal legs)
-function vesToCopViaUsd(amountVES) {
-  const r = state.rates;
-  const usdAmt = amountVES / r.usdves.sell;   // leg 1: business sells USD
-  return usdAmt * r.usdcop.buy;               // leg 2: business buys USD
+function getBridge(a, b) {
+  return CURRENCIES.find(c => c !== a && c !== b);
+}
+
+// convert from -> to by routing through the third currency (2 internal legs)
+function convertViaBridge(amount, fromCur, toCur) {
+  const bridge = getBridge(fromCur, toCur);
+  return convertDirect(convertDirect(amount, fromCur, bridge), bridge, toCur);
+}
+
+function fmtRate(v) {
+  return v.toLocaleString("es-CO", { maximumFractionDigits: 6 });
 }
 
 // ═══════════════════════════ TABS ═══════════════════════════
@@ -466,15 +465,7 @@ const opRoute = document.getElementById("opRoute");
 const routeField = document.getElementById("routeField");
 let lastOp = null;
 
-function isCopVesPair(a, b) {
-  return (a === "COP" && b === "VES") || (a === "VES" && b === "COP");
-}
-
-function updateRouteVisibility() {
-  routeField.style.display = isCopVesPair(opFrom.value, opTo.value) ? "block" : "none";
-}
-
-[opAmount, opFrom, opTo, opRoute].forEach(el => el.addEventListener("input", () => { updateRouteVisibility(); renderOperacion(); }));
+[opAmount, opFrom, opTo, opRoute].forEach(el => el.addEventListener("input", renderOperacion));
 
 function renderOperacion() {
   const amount = parseFloat(opAmount.value);
@@ -492,22 +483,27 @@ function renderOperacion() {
     return;
   }
 
-  let received, route = "directo";
-  if (isCopVesPair(from, to) && opRoute.value === "via_usd") {
-    route = "via_usd";
-    received = (from === "COP") ? copToVesViaUsd(amount) : vesToCopViaUsd(amount);
-  } else {
-    received = convertDirect(amount, from, to);
-  }
+  const bridge = getBridge(from, to);
+  const directAmt = convertDirect(amount, from, to);
+  const viaAmt = convertViaBridge(amount, from, to);
+  const profitDirect = usdValue(amount, from) - usdValue(directAmt, to);
+  const profitVia = usdValue(amount, from) - usdValue(viaAmt, to);
 
-  const profitUSD = usdValue(amount, from) - usdValue(received, to);
+  let route = opRoute.value;
+  if (route === "auto") route = profitVia > profitDirect ? "via" : "directo";
 
-  lastOp = { amount, from, to, received, route, profitUSD, ts: new Date().toISOString() };
+  const received = route === "via" ? viaAmt : directAmt;
+  const profitUSD = route === "via" ? profitVia : profitDirect;
+  const extra = profitVia - profitDirect;
+
+  lastOp = { amount, from, to, received, route, bridge, profitUSD, ts: new Date().toISOString() };
 
   box.innerHTML = `
+    <div class="result-line"><span>Método usado</span><span>${route === "via" ? "Arbitraje vía " + bridge : "Intercambio directo"}</span></div>
     <div class="result-line"><span>Le entregas al cliente</span><span>${fmt(received, to)}</span></div>
-    <div class="result-line"><span>Valor recibido (USD equiv.)</span><span>${fmtUsd(usdValue(amount, from))}</span></div>
-    <div class="result-line"><span>Valor entregado (USD equiv.)</span><span>${fmtUsd(usdValue(received, to))}</span></div>
+    <div class="result-line"><span>Opción directa</span><span>${fmt(directAmt, to)} · ${fmtUsd(profitDirect)}</span></div>
+    <div class="result-line"><span>Opción vía ${bridge}</span><span>${fmt(viaAmt, to)} · ${fmtUsd(profitVia)}</span></div>
+    ${opRoute.value === "auto" ? `<div class="result-line"><span>Ganancia extra por elegir el mejor método</span><span>${extra >= 0 ? "+" : ""}${fmtUsd(extra)}</span></div>` : ""}
     <div style="margin-top:10px">
       <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em">Ganancia estimada</div>
       <div class="big ${profitUSD >= 0 ? "profit" : "loss"}">${fmtUsd(profitUSD)}</div>
@@ -523,7 +519,7 @@ document.getElementById("btnRegistrar").addEventListener("click", () => {
     ts: lastOp.ts,
     giveCur: lastOp.from, giveAmt: lastOp.amount,
     getCur: lastOp.to, getAmt: lastOp.received,
-    route: lastOp.route,
+    route: lastOp.route, bridge: lastOp.bridge,
     profitUSD: lastOp.profitUSD
   });
   saveState();
@@ -532,54 +528,46 @@ document.getElementById("btnRegistrar").addEventListener("click", () => {
 });
 
 // ═══════════════════════════ FUGA TRIANGULAR ═══════════════════════════
+const LEAK_CHECKS = [
+  { from: "COP", to: "VES" }, { from: "VES", to: "COP" },
+  { from: "USD", to: "COP" }, { from: "COP", to: "USD" },
+  { from: "USD", to: "VES" }, { from: "VES", to: "USD" }
+];
+const NOTIONAL = { COP: 1000000, VES: 2000000, USD: 100 };
+const LEAK_TOL = { COP: 1, VES: 0.01, USD: 0.001 };
+
 function renderFuga() {
-  // Direction 1: COP -> VES
-  const notionalCOP = 1000000;
-  const direct1 = convertDirect(notionalCOP, "COP", "VES");
-  const via1 = copToVesViaUsd(notionalCOP);
-  const diff1 = via1 - direct1;
-  const leak1 = diff1 > 0.0001;
+  const grid = document.getElementById("leakGrid");
+  grid.innerHTML = LEAK_CHECKS.map(({ from, to }) => {
+    const bridge = getBridge(from, to);
+    const amount = NOTIONAL[from];
+    const direct = convertDirect(amount, from, to);
+    const via = convertViaBridge(amount, from, to);
+    const diff = via - direct;
+    const leak = diff > LEAK_TOL[to];
 
-  document.getElementById("leak1_direct").textContent = fmt(direct1, "VES");
-  document.getElementById("leak1_via").textContent = fmt(via1, "VES");
-  document.getElementById("leak1_diff").textContent = (diff1 >= 0 ? "+" : "") + fmt(diff1, "VES");
-  const b1 = document.getElementById("leak1_badge");
-  const card1 = document.getElementById("leakCard1");
-  if (leak1) {
-    b1.innerHTML = `<span class="badge bad">⚠ Fuga detectada</span>`;
-    card1.classList.add("leak"); card1.classList.remove("safe");
-    const minBuy = state.rates.usdves.buy / state.rates.usdcop.sell;
-    document.getElementById("leak1_fix").textContent =
-      `Un cliente puede obtener más bolívares dividiendo la operación en dos (COP→USD y USD→VES) que cambiando directo contigo. Sube tu compra COP/VES a al menos ${minBuy.toFixed(6)} VES por COP para cerrar la fuga.`;
-  } else {
-    b1.innerHTML = `<span class="badge ok">✓ Sin fuga</span>`;
-    card1.classList.add("safe"); card1.classList.remove("leak");
-    document.getElementById("leak1_fix").textContent = "Tu tasa directa ya es igual o mejor que la ruta cruzada. No necesitas ajustar nada.";
-  }
+    let fix;
+    if (leak) {
+      const { pairKey, side } = directSide(from, to);
+      const label = PAIR_DEF[pairKey].label;
+      fix = side === "buy"
+        ? `Sube tu compra ${label} a al menos ${fmtRate(via / amount)} para cerrar la fuga.`
+        : `Baja tu venta ${label} a máximo ${fmtRate(amount / via)} para cerrar la fuga.`;
+    } else {
+      fix = "Tu tasa directa ya es igual o mejor que la ruta cruzada. No necesitas ajustar nada.";
+    }
 
-  // Direction 2: VES -> COP
-  const notionalVES = 2000000;
-  const direct2 = convertDirect(notionalVES, "VES", "COP");
-  const via2 = vesToCopViaUsd(notionalVES);
-  const diff2 = via2 - direct2;
-  const leak2 = diff2 > 0.0001;
-
-  document.getElementById("leak2_direct").textContent = fmt(direct2, "COP");
-  document.getElementById("leak2_via").textContent = fmt(via2, "COP");
-  document.getElementById("leak2_diff").textContent = (diff2 >= 0 ? "+" : "") + fmt(diff2, "COP");
-  const b2 = document.getElementById("leak2_badge");
-  const card2 = document.getElementById("leakCard2");
-  if (leak2) {
-    b2.innerHTML = `<span class="badge bad">⚠ Fuga detectada</span>`;
-    card2.classList.add("leak"); card2.classList.remove("safe");
-    const maxSell = state.rates.usdves.sell / state.rates.usdcop.buy;
-    document.getElementById("leak2_fix").textContent =
-      `Un cliente puede obtener más pesos dividiendo la operación en dos (VES→USD y USD→COP) que cambiando directo contigo. Baja tu venta COP/VES a máximo ${maxSell.toFixed(6)} VES por COP para cerrar la fuga.`;
-  } else {
-    b2.innerHTML = `<span class="badge ok">✓ Sin fuga</span>`;
-    card2.classList.add("safe"); card2.classList.remove("leak");
-    document.getElementById("leak2_fix").textContent = "Tu tasa directa ya es igual o mejor que la ruta cruzada. No necesitas ajustar nada.";
-  }
+    return `
+      <div class="card leak-card ${leak ? "leak" : "safe"}" style="margin-bottom:0">
+        <h2 style="font-size:13px">${from} → ${to}</h2>
+        <div class="flow">Notional: <b>${fmt(amount, from)}</b> · puente: <b>${bridge}</b></div>
+        <div class="result-line"><span>Ruta directa</span><span>${fmt(direct, to)}</span></div>
+        <div class="result-line"><span>Ruta vía ${bridge}</span><span>${fmt(via, to)}</span></div>
+        <div class="result-line"><span>Diferencia</span><span>${diff >= 0 ? "+" : ""}${fmt(diff, to)}</span></div>
+        <div style="margin-top:10px">${leak ? `<span class="badge bad">⚠ Fuga detectada</span>` : `<span class="badge ok">✓ Sin fuga</span>`}</div>
+        <p class="hint">${fix}</p>
+      </div>`;
+  }).join("");
 }
 
 // ═══════════════════════════ CAJA ═══════════════════════════
@@ -624,7 +612,7 @@ function renderCaja() {
       <td>${new Date(e.ts).toLocaleString("es-CO")}</td>
       <td>${fmt(e.giveAmt, e.giveCur)}</td>
       <td>${fmt(e.getAmt, e.getCur)}</td>
-      <td>${e.route === "via_usd" ? "Vía USD" : "Directa"}</td>
+      <td>${e.route === "via" ? "Vía " + e.bridge : "Directa"}</td>
       <td style="color:${e.profitUSD >= 0 ? "var(--g1)" : "var(--red)"}">${fmtUsd(e.profitUSD)}</td>
       <td><button class="danger-ghost" data-id="${e.id}">Eliminar</button></td>
     </tr>`).join("");
@@ -659,9 +647,9 @@ document.getElementById("btnClearLedger").addEventListener("click", () => {
 
 document.getElementById("btnExport").addEventListener("click", () => {
   if (state.ledger.length === 0) { toast("No hay operaciones para exportar"); return; }
-  const header = "fecha,entrega_moneda,entrega_monto,recibe_moneda,recibe_monto,ruta,ganancia_usd\n";
+  const header = "fecha,entrega_moneda,entrega_monto,recibe_moneda,recibe_monto,ruta,puente,ganancia_usd\n";
   const rows = state.ledger.map(e =>
-    [new Date(e.ts).toISOString(), e.giveCur, e.giveAmt, e.getCur, e.getAmt, e.route, e.profitUSD.toFixed(2)].join(",")
+    [new Date(e.ts).toISOString(), e.giveCur, e.giveAmt, e.getCur, e.getAmt, e.route, e.bridge || "", e.profitUSD.toFixed(2)].join(",")
   ).join("\n");
   const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
@@ -726,7 +714,6 @@ function renderAll() {
 }
 
 populateRateInputs();
-updateRouteVisibility();
 loadFondoInputs();
 renderAll();
 </script>

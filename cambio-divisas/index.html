@@ -143,6 +143,7 @@
 
   <div class="tabs">
     <button class="tab-btn active" data-tab="tasas">Tasas del día</button>
+    <button class="tab-btn" data-tab="triangulacion">Triangulación (cliente)</button>
     <button class="tab-btn" data-tab="operacion">Calculadora de operación</button>
     <button class="tab-btn" data-tab="fuga">Fuga triangular</button>
     <button class="tab-btn" data-tab="caja">Caja y registro</button>
@@ -178,6 +179,41 @@
         </div>
       </div>
       <p class="hint" id="ratesTimestamp"></p>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: TRIANGULACIÓN (CLIENTE) ═══ -->
+  <div class="panel" id="panel-triangulacion">
+    <div class="card">
+      <h2>Triangulación para ti como cliente</h2>
+      <p class="sub">Simula cerrar el círculo completo entre las 3 monedas: empiezas con una, pasas por las otras dos, y vuelves a la primera. Si terminas con más de lo que empezaste, esa es tu ganancia. Usa las tasas de la pestaña "Tasas del día" — puedes editarlas ahí para probar "¿y si en un tramo consigo mejor tasa con otro cambista?".</p>
+      <div class="row">
+        <div>
+          <label>Monto inicial</label>
+          <input type="number" id="triAmount" step="0.01" value="1000000">
+        </div>
+        <div>
+          <label>Moneda de partida</label>
+          <select id="triCur"><option value="COP">COP — Peso colombiano</option><option value="VES">VES — Bolívar</option><option value="USD">USD — Dólar</option></select>
+        </div>
+      </div>
+      <p class="hint" id="triBest" style="margin-top:14px"></p>
+      <div class="grid2" style="margin-top:8px">
+        <div class="card leak-card" id="triCardA" style="margin-bottom:0">
+          <h2 style="font-size:13px" id="triA_title"></h2>
+          <div class="flow" id="triA_flow"></div>
+          <div class="result-line"><span>Terminas con</span><span id="triA_final"></span></div>
+          <div class="result-line"><span>Ganancia / pérdida</span><span id="triA_gain"></span></div>
+          <div style="margin-top:10px" id="triA_badge"></div>
+        </div>
+        <div class="card leak-card" id="triCardB" style="margin-bottom:0">
+          <h2 style="font-size:13px" id="triB_title"></h2>
+          <div class="flow" id="triB_flow"></div>
+          <div class="result-line"><span>Terminas con</span><span id="triB_final"></span></div>
+          <div class="result-line"><span>Ganancia / pérdida</span><span id="triB_gain"></span></div>
+          <div style="margin-top:10px" id="triB_badge"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -570,6 +606,71 @@ function renderFuga() {
   }).join("");
 }
 
+// ═══════════════════════════ TRIANGULACIÓN (CLIENTE) ═══════════════════════════
+const triAmount = document.getElementById("triAmount");
+const triCur = document.getElementById("triCur");
+[triAmount, triCur].forEach(el => el.addEventListener("input", renderTriangulacion));
+
+// path: e.g. ['COP','USD','VES','COP'] — three hops, back to the start
+function walkLoop(amount, path) {
+  const steps = [{ cur: path[0], amt: amount }];
+  let amt = amount;
+  for (let i = 0; i < path.length - 1; i++) {
+    amt = convertDirect(amt, path[i], path[i + 1]);
+    steps.push({ cur: path[i + 1], amt });
+  }
+  return steps;
+}
+
+function renderLoopCard(prefix, path, initial) {
+  const steps = walkLoop(initial, path);
+  const final = steps[steps.length - 1].amt;
+  const gain = final - initial;
+  const pct = (gain / initial) * 100;
+
+  document.getElementById(prefix + "_title").textContent = path.join(" → ");
+  document.getElementById(prefix + "_flow").textContent = steps.map(s => fmt(s.amt, s.cur)).join("  →  ");
+  document.getElementById(prefix + "_final").textContent = fmt(final, path[0]);
+
+  const gainEl = document.getElementById(prefix + "_gain");
+  gainEl.textContent = `${gain >= 0 ? "+" : ""}${fmt(gain, path[0])}  (${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%)`;
+  gainEl.style.color = gain >= 0 ? "var(--g1)" : "var(--red)";
+
+  const card = document.getElementById(prefix.replace("tri", "triCard"));
+  const badge = document.getElementById(prefix + "_badge");
+  if (gain > 0) {
+    badge.innerHTML = `<span class="badge ok">✓ Rentable</span>`;
+    card.classList.add("safe"); card.classList.remove("leak");
+  } else {
+    badge.innerHTML = `<span class="badge bad">✗ Con pérdida</span>`;
+    card.classList.add("leak"); card.classList.remove("safe");
+  }
+  return gain;
+}
+
+function renderTriangulacion() {
+  const amount = parseFloat(triAmount.value);
+  const start = triCur.value;
+  const best = document.getElementById("triBest");
+
+  if (!isFinite(amount) || amount <= 0) {
+    best.textContent = "Ingresa un monto válido.";
+    return;
+  }
+
+  const others = CURRENCIES.filter(c => c !== start);
+  const gainA = renderLoopCard("triA", [start, others[0], others[1], start], amount);
+  const gainB = renderLoopCard("triB", [start, others[1], others[0], start], amount);
+
+  if (gainA <= 0 && gainB <= 0) {
+    best.innerHTML = `Con las tasas actuales, ninguna de las dos rutas es rentable — pagas el margen 3 veces y eso pesa más que cualquier desajuste entre pares. Para que la triangulación gane, necesitas una mejor tasa en al menos un tramo (por ejemplo, de otro cambista): pruébalo editando esa tasa en "Tasas del día".`;
+  } else {
+    const winner = gainA >= gainB ? "A" : "B";
+    const path = winner === "A" ? [start, others[0], others[1], start] : [start, others[1], others[0], start];
+    best.innerHTML = `<b style="color:var(--g1)">Ruta rentable: ${path.join(" → ")}</b> — con tus tasas actuales, esta es la triangulación que te conviene.`;
+  }
+}
+
 // ═══════════════════════════ CAJA ═══════════════════════════
 ["fondoCOP", "fondoVES", "fondoUSD"].forEach(id => {
   document.getElementById(id).value = 0;
@@ -728,6 +829,7 @@ function renderResumen() {
 // ═══════════════════════════ RENDER ALL ═══════════════════════════
 function renderAll() {
   renderRates();
+  renderTriangulacion();
   renderOperacion();
   renderFuga();
   renderCaja();

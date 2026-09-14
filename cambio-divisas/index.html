@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sistema de Ganancias — COP · VES · USD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:          #0d0f14;
+    --surface:     #13161d;
+    --surface-2:   #1a1e28;
+    --surface-3:   #20242f;
+    --border:      #252938;
+    --g1:          #22c55e;   /* green - profit */
+    --g2:          #06b6d4;   /* cyan */
+    --g3:          #f59e0b;   /* amber */
+    --red:         #ef4444;
+    --text:        #e8eaf0;
+    --text-muted:  #6b7280;
+    --text-dim:    #9ca3af;
+    --radius:      14px;
+    --font-sans:   'Inter', system-ui, sans-serif;
+    --font-mono:   'JetBrains Mono', monospace;
+  }
+
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+  .layout { max-width: 980px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  header { display: flex; align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; flex-wrap: wrap; }
+
+  .icon { width: 42px; height: 42px; border-radius: 11px; background: linear-gradient(135deg, var(--g1), var(--g2)); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+
+  h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 22px; }
+
+  .tab-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); border-radius: 100px; padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; }
+  .tab-btn:hover { color: var(--text); border-color: var(--g2); }
+  .tab-btn.active { background: linear-gradient(135deg, var(--g1), var(--g2)); color: #06131a; border-color: transparent; font-weight: 600; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+  .card h2 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .card .sub { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 700px) { .grid3, .grid2 { grid-template-columns: 1fr; } }
+
+  .rate-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .rate-card .pair-name { font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .rate-card .pair-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+
+  label { display: block; font-size: 11.5px; color: var(--text-dim); margin-bottom: 4px; font-weight: 500; }
+  .field { margin-bottom: 10px; }
+
+  input[type=number], input[type=text], select {
+    width: 100%; background: var(--surface-3); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); padding: 9px 10px; font-size: 14px; font-family: var(--font-mono); outline: none;
+    transition: border-color .15s;
+  }
+  input[type=number]:focus, input[type=text]:focus, select:focus { border-color: var(--g2); }
+  select { font-family: var(--font-sans); cursor: pointer; }
+
+  .spread-tag { display: inline-block; margin-top: 4px; font-size: 11px; font-family: var(--font-mono); color: var(--g1); background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); border-radius: 100px; padding: 2px 9px; }
+  .spread-tag.warn { color: var(--red); background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.25); }
+
+  .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .row > * { flex: 1; min-width: 140px; }
+
+  button.primary {
+    background: linear-gradient(135deg, var(--g1), var(--g2)); color: #06131a; border: none; border-radius: 9px;
+    padding: 10px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: opacity .15s, transform .1s;
+  }
+  button.primary:hover { opacity: .9; }
+  button.primary:active { transform: scale(.98); }
+  button.primary:disabled { opacity: .35; cursor: not-allowed; }
+
+  button.ghost { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 9px; padding: 9px 14px; font-size: 13px; cursor: pointer; }
+  button.ghost:hover { color: var(--text); border-color: var(--g2); }
+
+  button.danger-ghost { background: transparent; border: 1px solid rgba(239,68,68,.35); color: #fca5a5; border-radius: 7px; padding: 5px 9px; font-size: 12px; cursor: pointer; }
+  button.danger-ghost:hover { background: rgba(239,68,68,.1); }
+
+  .result-box { margin-top: 14px; background: var(--surface-3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .result-box .big { font-size: 22px; font-weight: 700; font-family: var(--font-mono); }
+  .result-box .big.profit { color: var(--g1); }
+  .result-box .big.loss { color: var(--red); }
+  .result-line { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-dim); padding: 3px 0; }
+  .result-line span:last-child { color: var(--text); font-family: var(--font-mono); }
+
+  .badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 100px; padding: 4px 11px; font-size: 11.5px; font-weight: 600; }
+  .badge.ok  { background: rgba(34,197,94,.12); color: var(--g1); border: 1px solid rgba(34,197,94,.3); }
+  .badge.bad { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+
+  .leak-card { border-left: 3px solid var(--border); }
+  .leak-card.leak { border-left-color: var(--red); }
+  .leak-card.safe { border-left-color: var(--g1); }
+
+  .flow { font-size: 12.5px; color: var(--text-dim); font-family: var(--font-mono); margin: 8px 0; }
+  .flow b { color: var(--text); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { text-align: left; color: var(--text-muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); }
+  tr:last-child td { border-bottom: none; }
+  .table-wrap { overflow-x: auto; }
+  .empty-row td { text-align: center; color: var(--text-muted); font-family: var(--font-sans); padding: 24px 10px; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media (max-width: 700px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .stat .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: .03em; margin-bottom: 6px; }
+  .stat .value { font-size: 19px; font-weight: 700; font-family: var(--font-mono); }
+  .stat .value.pos { color: var(--g1); }
+  .stat .value.neg { color: var(--red); }
+
+  .footer-note { text-align: center; font-size: 11.5px; color: var(--text-muted); margin-top: 30px; }
+  .hint { font-size: 11.5px; color: var(--text-muted); margin-top: 8px; line-height: 1.5; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface-2); border: 1px solid var(--g1); color: var(--text); padding: 10px 18px; border-radius: 100px; font-size: 13px; opacity: 0; transition: all .25s; pointer-events: none; z-index: 50; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <header>
+    <div class="icon">💱</div>
+    <div>
+      <h1>Sistema de Ganancias — Intercambio COP · VES · USD</h1>
+      <p>Calculadora de márgenes, detector de fuga triangular y caja para casas de cambio</p>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="tasas">Tasas del día</button>
+    <button class="tab-btn" data-tab="operacion">Calculadora de operación</button>
+    <button class="tab-btn" data-tab="fuga">Fuga triangular</button>
+    <button class="tab-btn" data-tab="caja">Caja y registro</button>
+    <button class="tab-btn" data-tab="resumen">Resumen</button>
+  </div>
+
+  <!-- ═══ TAB: TASAS ═══ -->
+  <div class="panel active" id="panel-tasas">
+    <div class="card">
+      <h2>Tasas del día</h2>
+      <p class="sub">Compra = lo que paga tu negocio al adquirir la moneda base. Venta = lo que cobra al entregarla. Actualiza estos valores cada vez que cambie el mercado.</p>
+      <div class="grid3">
+        <div class="rate-card">
+          <div class="pair-name">USD / COP</div>
+          <div class="pair-desc">Pesos colombianos por 1 USD</div>
+          <div class="field"><label>Compra (COP por USD)</label><input type="number" step="0.01" id="usdcop_buy"></div>
+          <div class="field"><label>Venta (COP por USD)</label><input type="number" step="0.01" id="usdcop_sell"></div>
+          <span class="spread-tag" id="usdcop_spread"></span>
+        </div>
+        <div class="rate-card">
+          <div class="pair-name">USD / VES</div>
+          <div class="pair-desc">Bolívares por 1 USD</div>
+          <div class="field"><label>Compra (VES por USD)</label><input type="number" step="0.0001" id="usdves_buy"></div>
+          <div class="field"><label>Venta (VES por USD)</label><input type="number" step="0.0001" id="usdves_sell"></div>
+          <span class="spread-tag" id="usdves_spread"></span>
+        </div>
+        <div class="rate-card">
+          <div class="pair-name">COP / VES</div>
+          <div class="pair-desc">Bolívares por 1 peso colombiano</div>
+          <div class="field"><label>Compra (VES por COP)</label><input type="number" step="0.000001" id="copves_buy"></div>
+          <div class="field"><label>Venta (VES por COP)</label><input type="number" step="0.000001" id="copves_sell"></div>
+          <span class="spread-tag" id="copves_spread"></span>
+        </div>
+      </div>
+      <p class="hint" id="ratesTimestamp"></p>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: OPERACIÓN ═══ -->
+  <div class="panel" id="panel-operacion">
+    <div class="card">
+      <h2>Simulador de una operación</h2>
+      <p class="sub">Ingresa lo que el cliente entrega y a qué moneda quiere cambiarlo. El sistema calcula cuánto le entregas y la ganancia real que capturas.</p>
+      <div class="row">
+        <div>
+          <label>El cliente entrega</label>
+          <input type="number" id="opAmount" step="0.01" value="1000000">
+        </div>
+        <div>
+          <label>Moneda que entrega</label>
+          <select id="opFrom"><option value="COP">COP — Peso colombiano</option><option value="VES">VES — Bolívar</option><option value="USD">USD — Dólar</option></select>
+        </div>
+        <div>
+          <label>Moneda que recibe</label>
+          <select id="opTo"><option value="USD">USD — Dólar</option><option value="COP">COP — Peso colombiano</option><option value="VES">VES — Bolívar</option></select>
+        </div>
+      </div>
+      <div class="field" id="routeField" style="margin-top:12px; display:none">
+        <label>Ruta de ejecución interna</label>
+        <select id="opRoute">
+          <option value="directo">Directa (COP↔VES)</option>
+          <option value="via_usd">Vía USD (2 pasos internos)</option>
+        </select>
+      </div>
+      <div class="result-box" id="opResult"></div>
+      <div style="margin-top:14px">
+        <button class="primary" id="btnRegistrar">Registrar operación en caja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: FUGA TRIANGULAR ═══ -->
+  <div class="panel" id="panel-fuga">
+    <div class="card">
+      <h2>Detector de fuga triangular</h2>
+      <p class="sub">Compara tu tasa directa COP↔VES contra la tasa cruzada que resultaría de pasar por USD con tus propias tasas. Si la ruta cruzada da más, un cliente listo puede "romper" tu tasa directa haciendo dos operaciones en vez de una — y tú pierdes margen.</p>
+      <div class="grid2">
+        <div class="card leak-card" id="leakCard1" style="margin-bottom:0">
+          <h2 style="font-size:13px">Cliente entrega COP → recibe VES</h2>
+          <div class="flow">Notional: <b>1,000,000 COP</b></div>
+          <div class="result-line"><span>Ruta directa (COP→VES)</span><span id="leak1_direct"></span></div>
+          <div class="result-line"><span>Ruta vía USD (COP→USD→VES)</span><span id="leak1_via"></span></div>
+          <div class="result-line"><span>Diferencia</span><span id="leak1_diff"></span></div>
+          <div style="margin-top:10px" id="leak1_badge"></div>
+          <p class="hint" id="leak1_fix"></p>
+        </div>
+        <div class="card leak-card" id="leakCard2" style="margin-bottom:0">
+          <h2 style="font-size:13px">Cliente entrega VES → recibe COP</h2>
+          <div class="flow">Notional: <b>2,000,000 VES</b></div>
+          <div class="result-line"><span>Ruta directa (VES→COP)</span><span id="leak2_direct"></span></div>
+          <div class="result-line"><span>Ruta vía USD (VES→USD→COP)</span><span id="leak2_via"></span></div>
+          <div class="result-line"><span>Diferencia</span><span id="leak2_diff"></span></div>
+          <div style="margin-top:10px" id="leak2_badge"></div>
+          <p class="hint" id="leak2_fix"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: CAJA ═══ -->
+  <div class="panel" id="panel-caja">
+    <div class="card">
+      <h2>Fondeo inicial de caja</h2>
+      <p class="sub">Define con cuánto efectivo de cada moneda arranca tu operación (una sola vez, puedes ajustarlo cuando quieras).</p>
+      <div class="grid3">
+        <div class="field"><label>COP en caja</label><input type="number" id="fondoCOP" step="0.01"></div>
+        <div class="field"><label>VES en caja</label><input type="number" id="fondoVES" step="0.01"></div>
+        <div class="field"><label>USD en caja</label><input type="number" id="fondoUSD" step="0.01"></div>
+      </div>
+      <button class="ghost" id="btnFondear">Guardar fondeo</button>
+    </div>
+
+    <div class="card">
+      <h2>Saldos actuales</h2>
+      <div class="stat-grid" id="cajaStats"></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px">
+        <div>
+          <h2 style="margin-bottom:0">Registro de operaciones</h2>
+          <p class="sub" style="margin-bottom:0">Historial de cada cambio realizado y su ganancia estimada.</p>
+        </div>
+        <div style="display:flex; gap:8px">
+          <button class="ghost" id="btnExport">Exportar CSV</button>
+          <button class="ghost" id="btnClearLedger">Borrar historial</button>
+        </div>
+      </div>
+      <div class="table-wrap" style="margin-top:14px">
+        <table>
+          <thead><tr><th>Fecha</th><th>Entregó</th><th>Recibió</th><th>Ruta</th><th>Ganancia (USD)</th><th></th></tr></thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: RESUMEN ═══ -->
+  <div class="panel" id="panel-resumen">
+    <div class="card">
+      <h2>Resumen general</h2>
+      <div class="stat-grid" id="resumenStats"></div>
+    </div>
+    <div class="card">
+      <h2>Ganancia por par de monedas</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Par</th><th>Operaciones</th><th>Ganancia (USD)</th></tr></thead>
+          <tbody id="resumenPorPar"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Valor de caja en USD (a tasa media)</h2>
+      <div class="stat-grid" id="cajaUsdStats"></div>
+    </div>
+  </div>
+
+  <p class="footer-note">Datos guardados solo en este navegador (localStorage) · Sin servidor, sin conexión externa · Uso interno</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════ STATE ═══════════════════════════
+const STORAGE_KEY = "cdv_state_v1";
+
+const defaultState = {
+  rates: {
+    usdcop: { buy: 4050, sell: 4150 },
+    usdves: { buy: 190,  sell: 205  },
+    copves: { buy: 0.044, sell: 0.048 }
+  },
+  ratesUpdatedAt: null,
+  caja: { COP: 0, VES: 0, USD: 0 },
+  ledger: []
+};
+
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return structuredClone(defaultState);
+    const parsed = JSON.parse(raw);
+    return { ...structuredClone(defaultState), ...parsed,
+      rates: { ...structuredClone(defaultState.rates), ...(parsed.rates || {}) },
+      caja: { ...structuredClone(defaultState.caja), ...(parsed.caja || {}) },
+      ledger: Array.isArray(parsed.ledger) ? parsed.ledger : []
+    };
+  } catch (e) {
+    return structuredClone(defaultState);
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ═══════════════════════════ HELPERS ═══════════════════════════
+const DECIMALS = { COP: 0, VES: 2, USD: 2 };
+const SYMBOL = { COP: "COP$", VES: "Bs.", USD: "US$" };
+
+function fmt(amount, cur) {
+  if (!isFinite(amount)) return "—";
+  const d = DECIMALS[cur] ?? 2;
+  return SYMBOL[cur] + " " + amount.toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+
+function fmtUsd(amount) {
+  if (!isFinite(amount)) return "—";
+  const sign = amount < 0 ? "-" : "";
+  return sign + "US$ " + Math.abs(amount).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function mid(pair) {
+  const r = state.rates[pair];
+  return (r.buy + r.sell) / 2;
+}
+
+// value of `amount` of `cur` expressed in USD, using today's mid rates
+function usdValue(amount, cur) {
+  if (cur === "USD") return amount;
+  if (cur === "COP") return amount / mid("usdcop");
+  if (cur === "VES") return amount / mid("usdves");
+  return NaN;
+}
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+// business rule: client gives `amount` of fromCur, receives computed amount of toCur
+// using the business's own direct posted rates (business always favorable side)
+function convertDirect(amount, fromCur, toCur) {
+  const r = state.rates;
+  if (fromCur === toCur) return amount;
+  if (fromCur === "USD" && toCur === "COP") return amount * r.usdcop.buy;
+  if (fromCur === "COP" && toCur === "USD") return amount / r.usdcop.sell;
+  if (fromCur === "USD" && toCur === "VES") return amount * r.usdves.buy;
+  if (fromCur === "VES" && toCur === "USD") return amount / r.usdves.sell;
+  if (fromCur === "COP" && toCur === "VES") return amount * r.copves.buy;
+  if (fromCur === "VES" && toCur === "COP") return amount / r.copves.sell;
+  return NaN;
+}
+
+// COP -> VES going through USD (two internal legs)
+function copToVesViaUsd(amountCOP) {
+  const r = state.rates;
+  const usdAmt = amountCOP / r.usdcop.sell;   // leg 1: business sells USD
+  return usdAmt * r.usdves.buy;               // leg 2: business buys USD
+}
+
+// VES -> COP going through USD (two internal legs)
+function vesToCopViaUsd(amountVES) {
+  const r = state.rates;
+  const usdAmt = amountVES / r.usdves.sell;   // leg 1: business sells USD
+  return usdAmt * r.usdcop.buy;               // leg 2: business buys USD
+}
+
+// ═══════════════════════════ TABS ═══════════════════════════
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+    renderAll();
+  });
+});
+
+// ═══════════════════════════ TASAS ═══════════════════════════
+const rateInputs = {
+  usdcop_buy: ["usdcop", "buy"], usdcop_sell: ["usdcop", "sell"],
+  usdves_buy: ["usdves", "buy"], usdves_sell: ["usdves", "sell"],
+  copves_buy: ["copves", "buy"], copves_sell: ["copves", "sell"]
+};
+
+function populateRateInputs() {
+  for (const [id, [pair, side]] of Object.entries(rateInputs)) {
+    document.getElementById(id).value = state.rates[pair][side];
+  }
+}
+
+Object.keys(rateInputs).forEach(id => {
+  document.getElementById(id).addEventListener("input", (e) => {
+    const [pair, side] = rateInputs[id];
+    const v = parseFloat(e.target.value);
+    state.rates[pair][side] = isFinite(v) ? v : 0;
+    state.ratesUpdatedAt = new Date().toISOString();
+    saveState();
+    renderAll();
+  });
+});
+
+function renderRates() {
+  ["usdcop", "usdves", "copves"].forEach(pair => {
+    const r = state.rates[pair];
+    const spreadPct = r.buy > 0 ? ((r.sell - r.buy) / r.buy) * 100 : 0;
+    const el = document.getElementById(pair + "_spread");
+    const bad = r.sell <= r.buy;
+    el.textContent = bad ? "⚠ venta ≤ compra: pérdida garantizada" : `Margen: ${spreadPct.toFixed(2)}%`;
+    el.className = "spread-tag" + (bad ? " warn" : "");
+  });
+
+  const ts = document.getElementById("ratesTimestamp");
+  ts.textContent = state.ratesUpdatedAt
+    ? "Última actualización: " + new Date(state.ratesUpdatedAt).toLocaleString("es-CO")
+    : "Aún no has editado las tasas — estos son valores de ejemplo, actualízalos con la tasa real del día.";
+}
+
+// ═══════════════════════════ OPERACIÓN ═══════════════════════════
+const opAmount = document.getElementById("opAmount");
+const opFrom = document.getElementById("opFrom");
+const opTo = document.getElementById("opTo");
+const opRoute = document.getElementById("opRoute");
+const routeField = document.getElementById("routeField");
+let lastOp = null;
+
+function isCopVesPair(a, b) {
+  return (a === "COP" && b === "VES") || (a === "VES" && b === "COP");
+}
+
+function updateRouteVisibility() {
+  routeField.style.display = isCopVesPair(opFrom.value, opTo.value) ? "block" : "none";
+}
+
+[opAmount, opFrom, opTo, opRoute].forEach(el => el.addEventListener("input", () => { updateRouteVisibility(); renderOperacion(); }));
+
+function renderOperacion() {
+  const amount = parseFloat(opAmount.value);
+  const from = opFrom.value, to = opTo.value;
+  const box = document.getElementById("opResult");
+
+  if (from === to) {
+    box.innerHTML = `<p class="hint">Selecciona dos monedas distintas.</p>`;
+    lastOp = null;
+    return;
+  }
+  if (!isFinite(amount) || amount <= 0) {
+    box.innerHTML = `<p class="hint">Ingresa un monto válido.</p>`;
+    lastOp = null;
+    return;
+  }
+
+  let received, route = "directo";
+  if (isCopVesPair(from, to) && opRoute.value === "via_usd") {
+    route = "via_usd";
+    received = (from === "COP") ? copToVesViaUsd(amount) : vesToCopViaUsd(amount);
+  } else {
+    received = convertDirect(amount, from, to);
+  }
+
+  const profitUSD = usdValue(amount, from) - usdValue(received, to);
+
+  lastOp = { amount, from, to, received, route, profitUSD, ts: new Date().toISOString() };
+
+  box.innerHTML = `
+    <div class="result-line"><span>Le entregas al cliente</span><span>${fmt(received, to)}</span></div>
+    <div class="result-line"><span>Valor recibido (USD equiv.)</span><span>${fmtUsd(usdValue(amount, from))}</span></div>
+    <div class="result-line"><span>Valor entregado (USD equiv.)</span><span>${fmtUsd(usdValue(received, to))}</span></div>
+    <div style="margin-top:10px">
+      <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em">Ganancia estimada</div>
+      <div class="big ${profitUSD >= 0 ? "profit" : "loss"}">${fmtUsd(profitUSD)}</div>
+    </div>`;
+}
+
+document.getElementById("btnRegistrar").addEventListener("click", () => {
+  if (!lastOp) { toast("Nada que registrar todavía"); return; }
+  state.caja[lastOp.from] = (state.caja[lastOp.from] || 0) + lastOp.amount;
+  state.caja[lastOp.to] = (state.caja[lastOp.to] || 0) - lastOp.received;
+  state.ledger.unshift({
+    id: Date.now(),
+    ts: lastOp.ts,
+    giveCur: lastOp.from, giveAmt: lastOp.amount,
+    getCur: lastOp.to, getAmt: lastOp.received,
+    route: lastOp.route,
+    profitUSD: lastOp.profitUSD
+  });
+  saveState();
+  renderAll();
+  toast("Operación registrada en caja");
+});
+
+// ═══════════════════════════ FUGA TRIANGULAR ═══════════════════════════
+function renderFuga() {
+  // Direction 1: COP -> VES
+  const notionalCOP = 1000000;
+  const direct1 = convertDirect(notionalCOP, "COP", "VES");
+  const via1 = copToVesViaUsd(notionalCOP);
+  const diff1 = via1 - direct1;
+  const leak1 = diff1 > 0.0001;
+
+  document.getElementById("leak1_direct").textContent = fmt(direct1, "VES");
+  document.getElementById("leak1_via").textContent = fmt(via1, "VES");
+  document.getElementById("leak1_diff").textContent = (diff1 >= 0 ? "+" : "") + fmt(diff1, "VES");
+  const b1 = document.getElementById("leak1_badge");
+  const card1 = document.getElementById("leakCard1");
+  if (leak1) {
+    b1.innerHTML = `<span class="badge bad">⚠ Fuga detectada</span>`;
+    card1.classList.add("leak"); card1.classList.remove("safe");
+    const minBuy = state.rates.usdves.buy / state.rates.usdcop.sell;
+    document.getElementById("leak1_fix").textContent =
+      `Un cliente puede obtener más bolívares dividiendo la operación en dos (COP→USD y USD→VES) que cambiando directo contigo. Sube tu compra COP/VES a al menos ${minBuy.toFixed(6)} VES por COP para cerrar la fuga.`;
+  } else {
+    b1.innerHTML = `<span class="badge ok">✓ Sin fuga</span>`;
+    card1.classList.add("safe"); card1.classList.remove("leak");
+    document.getElementById("leak1_fix").textContent = "Tu tasa directa ya es igual o mejor que la ruta cruzada. No necesitas ajustar nada.";
+  }
+
+  // Direction 2: VES -> COP
+  const notionalVES = 2000000;
+  const direct2 = convertDirect(notionalVES, "VES", "COP");
+  const via2 = vesToCopViaUsd(notionalVES);
+  const diff2 = via2 - direct2;
+  const leak2 = diff2 > 0.0001;
+
+  document.getElementById("leak2_direct").textContent = fmt(direct2, "COP");
+  document.getElementById("leak2_via").textContent = fmt(via2, "COP");
+  document.getElementById("leak2_diff").textContent = (diff2 >= 0 ? "+" : "") + fmt(diff2, "COP");
+  const b2 = document.getElementById("leak2_badge");
+  const card2 = document.getElementById("leakCard2");
+  if (leak2) {
+    b2.innerHTML = `<span class="badge bad">⚠ Fuga detectada</span>`;
+    card2.classList.add("leak"); card2.classList.remove("safe");
+    const maxSell = state.rates.usdves.sell / state.rates.usdcop.buy;
+    document.getElementById("leak2_fix").textContent =
+      `Un cliente puede obtener más pesos dividiendo la operación en dos (VES→USD y USD→COP) que cambiando directo contigo. Baja tu venta COP/VES a máximo ${maxSell.toFixed(6)} VES por COP para cerrar la fuga.`;
+  } else {
+    b2.innerHTML = `<span class="badge ok">✓ Sin fuga</span>`;
+    card2.classList.add("safe"); card2.classList.remove("leak");
+    document.getElementById("leak2_fix").textContent = "Tu tasa directa ya es igual o mejor que la ruta cruzada. No necesitas ajustar nada.";
+  }
+}
+
+// ═══════════════════════════ CAJA ═══════════════════════════
+["fondoCOP", "fondoVES", "fondoUSD"].forEach(id => {
+  document.getElementById(id).value = 0;
+});
+
+function loadFondoInputs() {
+  document.getElementById("fondoCOP").value = state.caja.COP;
+  document.getElementById("fondoVES").value = state.caja.VES;
+  document.getElementById("fondoUSD").value = state.caja.USD;
+}
+
+document.getElementById("btnFondear").addEventListener("click", () => {
+  state.caja.COP = parseFloat(document.getElementById("fondoCOP").value) || 0;
+  state.caja.VES = parseFloat(document.getElementById("fondoVES").value) || 0;
+  state.caja.USD = parseFloat(document.getElementById("fondoUSD").value) || 0;
+  saveState();
+  renderAll();
+  toast("Fondeo guardado");
+});
+
+function renderCaja() {
+  const grid = document.getElementById("cajaStats");
+  grid.innerHTML = ["COP", "VES", "USD"].map(cur => `
+    <div class="stat">
+      <div class="label">Caja ${cur}</div>
+      <div class="value">${fmt(state.caja[cur] || 0, cur)}</div>
+    </div>`).join("") + `
+    <div class="stat">
+      <div class="label">Ganancia total</div>
+      <div class="value ${totalProfit() >= 0 ? "pos" : "neg"}">${fmtUsd(totalProfit())}</div>
+    </div>`;
+
+  const body = document.getElementById("ledgerBody");
+  if (state.ledger.length === 0) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="6">Aún no hay operaciones registradas. Regístralas desde la pestaña "Calculadora de operación".</td></tr>`;
+    return;
+  }
+  body.innerHTML = state.ledger.map(e => `
+    <tr>
+      <td>${new Date(e.ts).toLocaleString("es-CO")}</td>
+      <td>${fmt(e.giveAmt, e.giveCur)}</td>
+      <td>${fmt(e.getAmt, e.getCur)}</td>
+      <td>${e.route === "via_usd" ? "Vía USD" : "Directa"}</td>
+      <td style="color:${e.profitUSD >= 0 ? "var(--g1)" : "var(--red)"}">${fmtUsd(e.profitUSD)}</td>
+      <td><button class="danger-ghost" data-id="${e.id}">Eliminar</button></td>
+    </tr>`).join("");
+
+  body.querySelectorAll("button[data-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = Number(btn.dataset.id);
+      const entry = state.ledger.find(x => x.id === id);
+      if (entry) {
+        // reverse the caja effect of this entry
+        state.caja[entry.giveCur] = (state.caja[entry.giveCur] || 0) - entry.giveAmt;
+        state.caja[entry.getCur] = (state.caja[entry.getCur] || 0) + entry.getAmt;
+      }
+      state.ledger = state.ledger.filter(x => x.id !== id);
+      saveState();
+      renderAll();
+    });
+  });
+}
+
+function totalProfit() {
+  return state.ledger.reduce((sum, e) => sum + e.profitUSD, 0);
+}
+
+document.getElementById("btnClearLedger").addEventListener("click", () => {
+  if (state.ledger.length === 0) return;
+  if (!confirm("¿Borrar todo el historial de operaciones? Esto no afecta los saldos actuales de caja.")) return;
+  state.ledger = [];
+  saveState();
+  renderAll();
+});
+
+document.getElementById("btnExport").addEventListener("click", () => {
+  if (state.ledger.length === 0) { toast("No hay operaciones para exportar"); return; }
+  const header = "fecha,entrega_moneda,entrega_monto,recibe_moneda,recibe_monto,ruta,ganancia_usd\n";
+  const rows = state.ledger.map(e =>
+    [new Date(e.ts).toISOString(), e.giveCur, e.giveAmt, e.getCur, e.getAmt, e.route, e.profitUSD.toFixed(2)].join(",")
+  ).join("\n");
+  const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "operaciones_cambio_divisas.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ═══════════════════════════ RESUMEN ═══════════════════════════
+function renderResumen() {
+  const total = totalProfit();
+  const todayStr = new Date().toDateString();
+  const todayProfit = state.ledger.filter(e => new Date(e.ts).toDateString() === todayStr)
+    .reduce((s, e) => s + e.profitUSD, 0);
+  const count = state.ledger.length;
+
+  document.getElementById("resumenStats").innerHTML = `
+    <div class="stat"><div class="label">Ganancia total</div><div class="value ${total >= 0 ? "pos" : "neg"}">${fmtUsd(total)}</div></div>
+    <div class="stat"><div class="label">Ganancia hoy</div><div class="value ${todayProfit >= 0 ? "pos" : "neg"}">${fmtUsd(todayProfit)}</div></div>
+    <div class="stat"><div class="label">Operaciones</div><div class="value">${count}</div></div>
+    <div class="stat"><div class="label">Ganancia promedio</div><div class="value ${(count ? total / count : 0) >= 0 ? "pos" : "neg"}">${fmtUsd(count ? total / count : 0)}</div></div>
+  `;
+
+  const pares = {};
+  state.ledger.forEach(e => {
+    const key = [e.giveCur, e.getCur].sort().join(" / ");
+    if (!pares[key]) pares[key] = { count: 0, profit: 0 };
+    pares[key].count++;
+    pares[key].profit += e.profitUSD;
+  });
+  const paresBody = document.getElementById("resumenPorPar");
+  const keys = Object.keys(pares);
+  paresBody.innerHTML = keys.length === 0
+    ? `<tr class="empty-row"><td colspan="3">Sin operaciones registradas todavía.</td></tr>`
+    : keys.map(k => `
+        <tr>
+          <td>${k}</td>
+          <td>${pares[k].count}</td>
+          <td style="color:${pares[k].profit >= 0 ? "var(--g1)" : "var(--red)"}">${fmtUsd(pares[k].profit)}</td>
+        </tr>`).join("");
+
+  document.getElementById("cajaUsdStats").innerHTML = ["COP", "VES", "USD"].map(cur => `
+    <div class="stat">
+      <div class="label">${cur} en USD</div>
+      <div class="value">${fmtUsd(usdValue(state.caja[cur] || 0, cur))}</div>
+    </div>`).join("") + `
+    <div class="stat">
+      <div class="label">Valor total de caja</div>
+      <div class="value pos">${fmtUsd(["COP", "VES", "USD"].reduce((s, c) => s + usdValue(state.caja[c] || 0, c), 0))}</div>
+    </div>`;
+}
+
+// ═══════════════════════════ RENDER ALL ═══════════════════════════
+function renderAll() {
+  renderRates();
+  renderOperacion();
+  renderFuga();
+  renderCaja();
+  renderResumen();
+}
+
+populateRateInputs();
+updateRouteVisibility();
+loadFondoInputs();
+renderAll();
+</script>
+</body>
+</html>

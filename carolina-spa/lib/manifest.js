@@ -112,7 +112,7 @@
       phone: "+57 324 401 9138",
       whatsapp: "+573244019138",
       email: "hola@carolspa-demo.co",
-      address: "Calle 20 # 59-25, Barrio Santa Fe, Medellín"
+      address: "Calle 20 # 59-24, Barrio Santa Fe, Medellín"
     }
   };
 })();

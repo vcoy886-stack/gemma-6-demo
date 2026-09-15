@@ -1,0 +1,574 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────
+// EMPRESA / USUARIOS
+// ─────────────────────────────────────────────────────────────
+
+model Company {
+  id            String  @id @default(cuid())
+  name          String
+  logoUrl       String?
+  address       String?
+  phone         String?
+  whatsapp      String?
+  email         String?
+  currency      String  @default("USD")
+  taxRate       Float   @default(0)
+  businessHours String?
+  policies      String?
+
+  onboardingStep     Int     @default(0)
+  onboardingComplete Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users          User[]
+  contacts       Contact[]
+  products       Product[]
+  categories     Category[]
+  pipelineStages PipelineStage[]
+  opportunities  Opportunity[]
+  tasks          Task[]
+  quotes         Quote[]
+  sales          Sale[]
+  automations    Automation[]
+  notifications  Notification[]
+  whatsappConfig WhatsappConfig?
+}
+
+enum Role {
+  ADMIN
+  GERENTE
+  VENDEDOR
+  ASISTENTE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(VENDEDOR)
+  active       Boolean  @default(true)
+  avatarColor  String   @default("#6366f1")
+  createdAt    DateTime @default(now())
+
+  contactsOwned      Contact[]        @relation("ContactOwner")
+  opportunitiesOwned Opportunity[]    @relation("OpportunityOwner")
+  tasksAssigned      Task[]           @relation("TaskAssignee")
+  activities         Activity[]
+  quotes             Quote[]          @relation("QuoteOwner")
+  sales              Sale[]           @relation("SaleOwner")
+  aiConversations    AiConversation[]
+  notifications      Notification[]
+  scoreEvents        ScoreEvent[]
+}
+
+// ─────────────────────────────────────────────────────────────
+// CRM: CONTACTOS (LEADS + CLIENTES UNIFICADOS)
+// ─────────────────────────────────────────────────────────────
+
+enum ContactStatus {
+  NUEVO
+  CONTACTADO
+  INTERESADO
+  CALIENTE
+  COTIZACION_ENVIADA
+  NEGOCIACION
+  GANADO
+  PERDIDO
+  SEGUIMIENTO
+}
+
+model Contact {
+  id        String  @id @default(cuid())
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  firstName   String
+  lastName    String?
+  phone       String?
+  whatsapp    String?
+  email       String?
+  city        String?
+  companyName String?
+  source      String? // Facebook, Instagram, Referido, Web, WhatsApp, etc.
+
+  status ContactStatus @default(NUEVO)
+  tags   String? // csv simple
+  notes  String?
+
+  score      Int    @default(0)
+  scoreLevel String @default("FRIO") // FRIO, INTERESADO, CALIENTE, MUY_CALIENTE, ALTA_PRIORIDAD
+
+  ownerId String?
+  owner   User?   @relation("ContactOwner", fields: [ownerId], references: [id])
+
+  isDemo Boolean @default(false)
+
+  lastContactAt  DateTime?
+  nextFollowUpAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  scoreEvents   ScoreEvent[]
+  opportunities Opportunity[]
+  activities    Activity[]
+  tasks         Task[]
+  conversations Conversation[]
+  quotes        Quote[]
+  sales         Sale[]
+
+  @@index([companyId, status])
+  @@index([companyId, score])
+}
+
+model ScoreEvent {
+  id          String   @id @default(cuid())
+  contactId   String
+  contact     Contact  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  points      Int
+  reason      String
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────
+// PRODUCTOS
+// ─────────────────────────────────────────────────────────────
+
+model Category {
+  id        String    @id @default(cuid())
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name      String
+  products  Product[]
+}
+
+enum ProductStatus {
+  ACTIVO
+  INACTIVO
+  AGOTADO
+}
+
+model Product {
+  id          String        @id @default(cuid())
+  companyId   String
+  company     Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name        String
+  code        String
+  categoryId  String?
+  category    Category?     @relation(fields: [categoryId], references: [id])
+  description String?
+  price       Float
+  cost        Float         @default(0)
+  stock       Int           @default(0)
+  status      ProductStatus @default(ACTIVO)
+  imageUrl    String?
+  isDemo      Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  opportunities Opportunity[]
+  quoteItems    QuoteItem[]
+  saleItems     SaleItem[]
+
+  @@unique([companyId, code])
+}
+
+// ─────────────────────────────────────────────────────────────
+// PIPELINE / OPORTUNIDADES
+// ─────────────────────────────────────────────────────────────
+
+model PipelineStage {
+  id          String  @id @default(cuid())
+  companyId   String
+  company     Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name        String
+  order       Int
+  isWon       Boolean @default(false)
+  isLost      Boolean @default(false)
+  probability Int     @default(50)
+
+  opportunities Opportunity[]
+}
+
+enum OpportunityStatus {
+  OPEN
+  WON
+  LOST
+}
+
+model Opportunity {
+  id                String            @id @default(cuid())
+  companyId         String
+  company           Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId         String
+  contact           Contact           @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  productId         String?
+  product           Product?          @relation(fields: [productId], references: [id])
+  title             String
+  value             Float             @default(0)
+  probability       Int               @default(50)
+  stageId           String
+  stage             PipelineStage     @relation(fields: [stageId], references: [id])
+  status            OpportunityStatus @default(OPEN)
+  expectedCloseDate DateTime?
+  ownerId           String?
+  owner             User?             @relation("OpportunityOwner", fields: [ownerId], references: [id])
+  nextAction        String?
+  lastContactAt     DateTime?
+  notes             String?
+  isDemo            Boolean           @default(false)
+  createdAt         DateTime          @default(now())
+  closedAt          DateTime?
+  updatedAt         DateTime          @updatedAt
+
+  activities Activity[]
+  tasks      Task[]
+
+  @@index([companyId, stageId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// ACTIVIDADES / TAREAS
+// ─────────────────────────────────────────────────────────────
+
+enum ActivityType {
+  CALL
+  EMAIL
+  WHATSAPP
+  MEETING
+  NOTE
+  STATUS_CHANGE
+  SYSTEM
+}
+
+model Activity {
+  id            String       @id @default(cuid())
+  contactId     String?
+  contact       Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  opportunityId String?
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  userId        String?
+  user          User?        @relation(fields: [userId], references: [id])
+  type          ActivityType
+  description   String
+  createdAt     DateTime     @default(now())
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TaskStatus {
+  PENDING
+  DONE
+  CANCELLED
+}
+
+model Task {
+  id            String       @id @default(cuid())
+  companyId     String
+  company       Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contactId     String?
+  contact       Contact?     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  opportunityId String?
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  assignedToId  String?
+  assignedTo    User?        @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  title         String
+  description   String?
+  dueDate       DateTime
+  priority      TaskPriority @default(MEDIUM)
+  status        TaskStatus   @default(PENDING)
+  isDemo        Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  completedAt   DateTime?
+
+  @@index([companyId, status, dueDate])
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONVERSACIONES / WHATSAPP
+// ─────────────────────────────────────────────────────────────
+
+enum ChannelType {
+  WHATSAPP
+  EMAIL
+  MANUAL
+}
+
+model Conversation {
+  id        String      @id @default(cuid())
+  contactId String
+  contact   Contact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  channel   ChannelType @default(WHATSAPP)
+  startedAt DateTime    @default(now())
+
+  messages Message[]
+}
+
+enum MessageDirection {
+  IN
+  OUT
+}
+
+model Message {
+  id             String           @id @default(cuid())
+  conversationId String
+  conversation   Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  direction      MessageDirection
+  content        String
+  sender         String?
+  aiGenerated    Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+}
+
+model WhatsappConfig {
+  id                 String   @id @default(cuid())
+  companyId          String   @unique
+  company            Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  connected          Boolean  @default(false)
+  phoneNumberId      String?
+  businessAccountId  String?
+  accessTokenSet     Boolean  @default(false)
+  webhookVerifyToken String?
+  updatedAt          DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────────────────────
+// COTIZACIONES
+// ─────────────────────────────────────────────────────────────
+
+enum QuoteStatus {
+  BORRADOR
+  ENVIADA
+  VISTA
+  ACEPTADA
+  RECHAZADA
+  VENCIDA
+}
+
+model Quote {
+  id         String      @id @default(cuid())
+  companyId  String
+  company    Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  number     String
+  contactId  String
+  contact    Contact     @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  ownerId    String?
+  owner      User?       @relation("QuoteOwner", fields: [ownerId], references: [id])
+  status     QuoteStatus @default(BORRADOR)
+  subtotal   Float       @default(0)
+  discount   Float       @default(0)
+  tax        Float       @default(0)
+  total      Float       @default(0)
+  conditions String?
+  validUntil DateTime?
+  isDemo     Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  items QuoteItem[]
+  sale  Sale?
+
+  @@unique([companyId, number])
+}
+
+model QuoteItem {
+  id        String  @id @default(cuid())
+  quoteId   String
+  quote     Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Float
+  price     Float
+  discount  Float   @default(0)
+  total     Float
+}
+
+// ─────────────────────────────────────────────────────────────
+// VENTAS
+// ─────────────────────────────────────────────────────────────
+
+enum SaleStatus {
+  PENDIENTE
+  PAGADA
+  EN_PROCESO
+  COMPLETADA
+  CANCELADA
+}
+
+model Sale {
+  id            String     @id @default(cuid())
+  companyId     String
+  company       Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  number        String
+  contactId     String
+  contact       Contact    @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  ownerId       String?
+  owner         User?      @relation("SaleOwner", fields: [ownerId], references: [id])
+  quoteId       String?    @unique
+  quote         Quote?     @relation(fields: [quoteId], references: [id])
+  subtotal      Float      @default(0)
+  discount      Float      @default(0)
+  tax           Float      @default(0)
+  total         Float      @default(0)
+  paymentMethod String?
+  status        SaleStatus @default(PENDIENTE)
+  saleDate      DateTime   @default(now())
+  notes         String?
+  isDemo        Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+
+  items    SaleItem[]
+  payments Payment[]
+
+  @@unique([companyId, number])
+  @@index([companyId, saleDate])
+}
+
+model SaleItem {
+  id        String  @id @default(cuid())
+  saleId    String
+  sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Float
+  price     Float
+  discount  Float   @default(0)
+  total     Float
+}
+
+enum PaymentStatus {
+  PENDIENTE
+  PAGADO
+  RECHAZADO
+  REEMBOLSADO
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  saleId    String
+  sale      Sale          @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  amount    Float
+  method    String
+  status    PaymentStatus @default(PENDIENTE)
+  paidAt    DateTime?
+  createdAt DateTime      @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUTOMATIZACIONES
+// ─────────────────────────────────────────────────────────────
+
+enum TriggerType {
+  LEAD_CREATED
+  SCORE_ABOVE
+  NO_RESPONSE_DAYS
+  SALE_WON
+  OPPORTUNITY_STAGE_CHANGED
+  QUOTE_EXPIRING
+}
+
+model Automation {
+  id            String      @id @default(cuid())
+  companyId     String
+  company       Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name          String
+  triggerType   TriggerType
+  triggerConfig String // JSON string
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+
+  actions AutomationAction[]
+  logs    AutomationLog[]
+}
+
+enum ActionType {
+  CREATE_TASK
+  MARK_PRIORITY
+  CHANGE_STATUS
+  CREATE_NOTIFICATION
+  ADD_SCORE
+}
+
+model AutomationAction {
+  id           String     @id @default(cuid())
+  automationId String
+  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  actionType   ActionType
+  actionConfig String // JSON string
+  order        Int        @default(0)
+}
+
+model AutomationLog {
+  id            String     @id @default(cuid())
+  automationId  String
+  automation    Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  contactId     String?
+  opportunityId String?
+  executedAt    DateTime   @default(now())
+  result        String
+}
+
+// ─────────────────────────────────────────────────────────────
+// NOTIFICACIONES
+// ─────────────────────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  type      String
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────
+// ASISTENTE IA
+// ─────────────────────────────────────────────────────────────
+
+model AiConversation {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String   @default("Nueva conversación")
+  createdAt DateTime @default(now())
+
+  messages AiMessage[]
+}
+
+enum AiRole {
+  USER
+  ASSISTANT
+}
+
+model AiMessage {
+  id               String         @id @default(cuid())
+  aiConversationId String
+  aiConversation   AiConversation @relation(fields: [aiConversationId], references: [id], onDelete: Cascade)
+  role             AiRole
+  content          String
+  createdAt        DateTime       @default(now())
+}

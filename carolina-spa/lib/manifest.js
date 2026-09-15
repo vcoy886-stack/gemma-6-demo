@@ -4,7 +4,7 @@
     name: "Carol Spa",
     tagline: "Tu cuerpo también necesita un respiro.",
     isDemo: true,
-    location: "Laureles, Medellín",
+    location: "Barrio Santa Fe, Medellín",
 
     stats: [
       { value: 1800, suffix: "+", label: "sesiones realizadas" },
@@ -48,7 +48,7 @@
       {
         name: "Reafirmar el Glúteo",
         sessions: "6 sesiones",
-        includes: ["Peeling con Vitamina C"],
+        includes: ["Pectina con Vitamina C"],
         price: 450000,
         payment: { upfront: 225000, installments: [112500, 112500] }
       },
@@ -112,7 +112,7 @@
       phone: "+57 324 401 9138",
       whatsapp: "+573244019138",
       email: "hola@carolspa-demo.co",
-      address: "Cra. 76 # 34-20, Laureles, Medellín"
+      address: "Calle 20 # 59-25, Barrio Santa Fe, Medellín"
     }
   };
 })();

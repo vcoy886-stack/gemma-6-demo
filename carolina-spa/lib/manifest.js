@@ -48,7 +48,7 @@
       {
         name: "Reafirmar el Glúteo",
         sessions: "6 sesiones",
-        includes: ["Pectina con Vitamina C"],
+        includes: ["Pectona con Vitamina C"],
         price: 450000,
         payment: { upfront: 225000, installments: [112500, 112500] }
       },

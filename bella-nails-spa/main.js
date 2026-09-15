@@ -186,6 +186,17 @@
       return (data.services || []).find(s => s.id === id);
     }
 
+    function findStaff(id) {
+      return (data.staff || []).find(s => s.id === id);
+    }
+
+    function selectedStaffLabel() {
+      const checked = $('input[name="bookStaff"]:checked', wizard);
+      const staff = checked ? findStaff(checked.value) : null;
+      if (!staff || staff.id === "cualquiera") return "Sin preferencia";
+      return staff.name;
+    }
+
     function updateSummary() {
       const service = findService($("#bookService")?.value);
       const dateVal = $("#bookDate")?.value;
@@ -193,6 +204,7 @@
       if (!service) return null;
 
       $$("[data-summary-service]", wizard).forEach(el => el.textContent = service.name);
+      $$("[data-summary-staff]", wizard).forEach(el => el.textContent = selectedStaffLabel());
       $$("[data-summary-date]", wizard).forEach(el => el.textContent = dateVal ? new Date(dateVal + "T00:00").toLocaleDateString("es-CO", { weekday: "long", day: "numeric", month: "long" }) : "—");
       $$("[data-summary-time]", wizard).forEach(el => el.textContent = timeVal || "—");
       $$("[data-summary-price]", wizard).forEach(el => el.textContent = fmtCOP(service.price));
@@ -237,7 +249,9 @@
           success.classList.add("is-active");
           const msg = $("[data-success-detail]", success);
           if (msg && service) {
-            msg.textContent = `Te esperamos el ${dateEl ? dateEl.textContent : ""} a las ${timeVal} para tu ${service.name}. Guarda tu comprobante por si acaso.`;
+            const staffLabel = selectedStaffLabel();
+            const withWhom = staffLabel === "Sin preferencia" ? "" : ` con ${staffLabel}`;
+            msg.textContent = `Te esperamos el ${dateEl ? dateEl.textContent : ""} a las ${timeVal} para tu ${service.name}${withWhom}. Guarda tu comprobante por si acaso.`;
           }
         }
       });

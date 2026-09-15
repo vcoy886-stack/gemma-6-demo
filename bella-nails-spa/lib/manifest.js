@@ -16,6 +16,13 @@
 
     timeSlots: ["9:00 am", "10:30 am", "12:00 m", "2:00 pm", "3:30 pm", "5:00 pm"],
 
+    staff: [
+      { id: "cualquiera", name: "Sin preferencia", specialty: "Te asignamos la mejor disponible", initials: "—" },
+      { id: "mariana", name: "Mariana López", specialty: "Especialista en uñas", initials: "ML" },
+      { id: "camila", name: "Camila Restrepo", specialty: "Cejas y pestañas", initials: "CR" },
+      { id: "valentina", name: "Valentina Gómez", specialty: "Manicure y pedicure", initials: "VG" }
+    ],
+
     depositPolicy: "El abono se descuenta del valor total del servicio. Cancela o reprograma sin costo avisando con al menos 24 horas de anticipación.",
 
     payment: {

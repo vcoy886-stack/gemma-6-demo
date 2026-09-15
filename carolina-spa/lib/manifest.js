@@ -29,16 +29,51 @@
       }
     ],
 
-    package: {
-      name: "Paquete Reductor Corporal",
-      sessions: "10 sesiones · 2 por semana (aprox. 5 semanas)",
-      includes: ["Vacumterapia", "Carboxiterapia", "Madero Terapia", "Masoterapia", "Radiofrecuencia", "Cavitación", "Gimnasia pasiva", "Sauna"],
-      note: "Se trabajan todas las partes del cuerpo.",
-      price: 950000,
-      payment: {
-        upfront: 475000,
-        installments: [237500, 237500]
+    packages: [
+      {
+        name: "Paquete Reductor Corporal",
+        sessions: "10 sesiones · 2 por semana (aprox. 5 semanas)",
+        includes: ["Vacumterapia", "Carboxiterapia", "Madero Terapia", "Masoterapia", "Mesoterapia", "Radiofrecuencia", "Cavitación", "Gimnasia pasiva", "Sauna"],
+        note: "Se trabajan todas las partes del cuerpo.",
+        price: 950000,
+        payment: { upfront: 475000, installments: [237500, 237500] }
+      },
+      {
+        name: "Masaje Post-operatorio",
+        sessions: "10 sesiones · 1 sesión diaria",
+        includes: ["Terapia de Masaje", "Sesiones de Drenaje Linfático Manual", "Ultrasonido", "Manta Térmica", "Ozono Frío", "Carboxiterapia (en la segunda parte)"],
+        price: 1100000,
+        payment: null
+      },
+      {
+        name: "Reafirmar el Glúteo",
+        sessions: "6 sesiones",
+        includes: ["Peeling con Vitamina C"],
+        price: 450000,
+        payment: { upfront: 225000, installments: [112500, 112500] }
+      },
+      {
+        name: "Tratamiento de Músculo Estriado",
+        sessions: "6 sesiones",
+        includes: ["Vacumterapia", "Levantamiento Manual"],
+        price: 500000,
+        payment: { upfront: 250000, installments: [125000, 125000] }
       }
+    ],
+
+    otherServices: {
+      depilacion: [
+        { name: "Cejas", price: 12000 },
+        { name: "Bozo", price: 10000 },
+        { name: "Axilas", price: 20000 },
+        { name: "Bikini parcial", price: 35000 },
+        { name: "Bikini completo", price: 60000 },
+        { name: "Media pierna", price: 40000 },
+        { name: "Pierna completa", price: 70000 }
+      ],
+      facial: [
+        { name: "Limpieza Facial Profunda", price: 110000 }
+      ]
     },
 
     testimonials: [
@@ -74,8 +109,8 @@
     ],
 
     contact: {
-      phone: "+57 300 000 0000",
-      whatsapp: "+57 300 000 0000",
+      phone: "+57 324 401 9138",
+      whatsapp: "+573244019138",
       email: "hola@carolspa-demo.co",
       address: "Cra. 76 # 34-20, Laureles, Medellín"
     }

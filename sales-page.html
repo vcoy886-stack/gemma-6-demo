@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Combo Zenova + Fungi Café — Infinity Brands</title>
+<meta name="description" content="Conviértete en distribuidor Infinity Brands con el Combo Zenova + Fungi Café. Invierte $279.000, vende hasta $429.000. Compra segura con Wompi." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream:      #f6f1e7;
+    --cream-2:    #efe7d6;
+    --paper:      #fffdf9;
+    --ink:        #2b2318;
+    --ink-soft:   #5c5240;
+    --brand:      #b9752f;
+    --brand-dark: #8f5a22;
+    --brand-deep: #7a4c1e;
+    --accent:     #c17a32;
+    --good:       #4f7a52;
+    --line:       #e4d9c3;
+    --radius-lg:  22px;
+    --radius-md:  16px;
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-sans:  'Inter', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    padding-bottom: 88px; /* space for mobile sticky bar */
+  }
+
+  img { max-width: 100%; display: block; }
+
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  a { color: inherit; }
+
+  /* ── Top bar ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(246,241,231,0.92);
+    backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar-inner {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brandmark {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    font-size: 13px;
+    color: var(--brand-dark);
+    text-transform: uppercase;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 100px;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+    color: #fff;
+    padding: 12px 22px;
+    font-size: 14.5px;
+    box-shadow: 0 8px 20px -8px rgba(122,76,30,0.55);
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(122,76,30,0.6); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-small { padding: 9px 16px; font-size: 13px; }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1.5px solid var(--brand);
+    color: var(--brand-dark);
+    padding: 11px 20px;
+    font-size: 14px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 44px 0 8px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 44px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-dark);
+    background: #fff3e2;
+    border: 1px solid #ecd6ae;
+    padding: 6px 12px;
+    border-radius: 100px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(32px, 4.6vw, 50px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--brand-dark);
+  }
+
+  .hero-sub {
+    margin-top: 16px;
+    font-size: 16.5px;
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+
+  .hero-cta-row {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-price {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .hero-price strong {
+    display: block;
+    font-family: var(--font-serif);
+    font-size: 26px;
+    color: var(--ink);
+  }
+
+  .trust-line {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  .trust-line svg { width: 15px; height: 15px; fill: var(--good); flex-shrink: 0; }
+
+  .hero-media {
+    position: relative;
+  }
+
+  .hero-media img {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px -30px rgba(122,76,30,0.35);
+  }
+
+  .hero-tag {
+    position: absolute;
+    bottom: -16px;
+    left: 20px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 10px 16px;
+    box-shadow: 0 12px 24px -12px rgba(43,35,24,0.25);
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-tag .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+
+  /* ── Section shell ── */
+  section { padding: 72px 0; }
+  section.tight { padding: 48px 0; }
+
+  .section-head { max-width: 620px; margin-bottom: 36px; }
+
+  .section-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-dark);
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(24px, 3.2vw, 34px);
+    letter-spacing: -0.01em;
+  }
+
+  .section-desc {
+    margin-top: 12px;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+  }
+
+  /* ── Product includes ── */
+  .includes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .include-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 20px;
+  }
+
+  .include-card .k {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin-bottom: 6px;
+  }
+
+  .include-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .include-card p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+
+  /* ── Calm/mind band ── */
+  .calm-band {
+    background: linear-gradient(180deg, var(--cream-2), var(--cream));
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .calm-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .calm-list { margin-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+
+  .calm-item { display: flex; gap: 12px; align-items: flex-start; }
+
+  .calm-item .ico {
+    width: 30px; height: 30px; flex-shrink: 0;
+    border-radius: 9px;
+    background: #fff3e2;
+    border: 1px solid #ecd6ae;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+
+  .calm-item p { font-size: 14.5px; color: var(--ink-soft); }
+  .calm-item strong { color: var(--ink); }
+
+  /* ── Numbers / business opportunity ── */
+  .numbers-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .stat-box {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+  }
+
+  .stat-box .label { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 6px; }
+  .stat-box .value { font-family: var(--font-serif); font-size: 26px; font-weight: 600; }
+
+  .profit-banner {
+    background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .profit-banner .label { font-size: 12.5px; opacity: 0.85; margin-bottom: 6px; }
+  .profit-banner .value { font-family: var(--font-serif); font-size: 30px; font-weight: 600; }
+  .profit-banner .roi { text-align: right; }
+  .profit-banner .roi .value { font-size: 34px; }
+
+  /* ── Steps ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .step-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    position: relative;
+  }
+
+  .step-num {
+    font-family: var(--font-serif);
+    font-size: 34px;
+    color: #ecd6ae;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .step-card h3 { font-size: 16px; margin-bottom: 6px; }
+  .step-card p { font-size: 13.5px; color: var(--ink-soft); }
+
+  /* ── Trust brands ── */
+  .brand-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    align-items: center;
+    justify-content: center;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand-strip span {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── FAQ ── */
+  .faq-item {
+    border-bottom: 1px solid var(--line);
+    padding: 18px 0;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .faq-item summary::-webkit-details-marker { display: none; }
+
+  .faq-item summary::after {
+    content: "+";
+    font-size: 20px;
+    color: var(--brand);
+    flex-shrink: 0;
+    margin-left: 12px;
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+
+  .faq-item p {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  /* ── Final CTA ── */
+  .final-cta {
+    background: linear-gradient(135deg, var(--brand-dark), var(--brand-deep));
+    border-radius: var(--radius-lg);
+    padding: 44px 32px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .final-cta h2 { color: #fff; }
+  .final-cta p { color: rgba(255,255,255,0.85); margin-top: 12px; max-width: 52ch; margin-left: auto; margin-right: auto; }
+  .final-cta .btn-primary { background: #fff; color: var(--brand-deep); margin-top: 22px; padding: 14px 28px; font-size: 15px; }
+  .final-cta .btn-primary:hover { box-shadow: 0 14px 30px -10px rgba(0,0,0,0.35); }
+
+  /* ── Footer ── */
+  footer {
+    padding: 32px 0 40px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  footer .disclaimer { margin-top: 6px; opacity: 0.8; }
+
+  /* ── Mobile sticky bar ── */
+  .sticky-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 50;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 12px 16px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 -8px 20px -12px rgba(43,35,24,0.2);
+  }
+
+  .sticky-bar .price { font-size: 13px; color: var(--ink-soft); }
+  .sticky-bar .price strong { display: block; font-family: var(--font-serif); font-size: 18px; color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-media { order: -1; }
+    .calm-grid { grid-template-columns: 1fr; }
+    .includes-grid { grid-template-columns: 1fr 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .numbers-grid { grid-template-columns: 1fr; }
+    .profit-banner { flex-direction: column; align-items: flex-start; }
+    .profit-banner .roi { text-align: left; }
+    .sticky-bar { display: flex; }
+    body { padding-bottom: 92px; }
+  }
+
+  @media (max-width: 520px) {
+    .includes-grid { grid-template-columns: 1fr; }
+    section { padding: 52px 0; }
+    .topbar .btn-small span.full { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brandmark">Infinity Brands</div>
+    <a class="btn btn-primary btn-small" href="https://checkout.wompi.co/l/oVn5Vk" target="_blank" rel="noopener">
+      <span class="full">Comprar ahora</span><span class="short-only" style="display:none">Comprar</span>
+    </a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Combo Zenova + Fungi Café</div>
+        <h1>Mente y calma:<br><em>tu negocio, tu bienestar.</em></h1>
+        <p class="hero-sub">
+          Calma para el estrés, claridad para el enfoque — control mental completo.
+          Empieza tu negocio con el combo que combina 3 unidades Zenova y 3 unidades Fungi Café.
+        </p>
+
+        <div class="hero-cta-row">
+          <a class="btn btn-primary" href="https://checkout.wompi.co/l/oVn5Vk" target="_blank" rel="noopener">
+            Comprar mi combo — $279.000
+          </a>
+          <div class="hero-price">
+            Venta potencial
+            <strong>$429.000</strong>
+          </div>
+        </div>
+
+        <div class="trust-line">
+          <svg viewBox="0 0 20 20"><path d="M10 1.5l7.5 3.4v5.1c0 5-3.2 9.2-7.5 10.5-4.3-1.3-7.5-5.5-7.5-10.5V4.9L10 1.5zm-1 12.6l5.6-5.6-1.4-1.4-4.2 4.2-2-2-1.4 1.4L9 14.1z"/></svg>
+          Pago 100% seguro procesado por Wompi · precios sujetos a cambio
+        </div>
+      </div>
+
+      <div class="hero-media">
+        <img src="assets/combo-zenova-fungi-cafe.jpg" alt="Combo Zenova + Fungi Café, línea de productos Infinity Brands" />
+        <div class="hero-tag"><span class="dot"></span> Retorno potencial del 54%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INCLUDES -->
+  <section class="tight">
+    <div class="section-head">
+      <div class="section-eyebrow">Qué incluye tu combo</div>
+      <h2>3 unidades Zenova + 3 unidades Fungi Café</h2>
+      <p class="section-desc">
+        Una línea completa pensada para acompañar la mente y el cuerpo: adaptógenos, minerales y
+        prebióticos de Zenova, junto al enfoque mental de Fungi Café.
+      </p>
+    </div>
+
+    <div class="includes-grid">
+      <div class="include-card">
+        <div class="k">Zenova Ashwagandha</div>
+        <h3>Calma para el estrés</h3>
+        <p>Withania somnifera 6Ch, para acompañar el manejo del estrés diario.</p>
+      </div>
+      <div class="include-card">
+        <div class="k">Zenova Magnesio</div>
+        <h3>Equilibrio mineral</h3>
+        <p>Magnesio y vitamina B6 para el funcionamiento normal del sistema nervioso.</p>
+      </div>
+      <div class="include-card">
+        <div class="k">Zenova Cúrcuma</div>
+        <h3>Bienestar general</h3>
+        <p>Cúrcuma longa 6Ch, un clásico de la medicina homeopática.</p>
+      </div>
+      <div class="include-card">
+        <div class="k">Zenova Inositol</div>
+        <h3>Fortificado con vitamina B6</h3>
+        <p>Apoyo para el equilibrio emocional y mental.</p>
+      </div>
+      <div class="include-card">
+        <div class="k">Zenova Remolacha & Queen</div>
+        <h3>Prebióticos y vitamina C</h3>
+        <p>Beta vulgaris 6Ch y una fórmula probiótica fortificada.</p>
+      </div>
+      <div class="include-card">
+        <div class="k">Fungi Café Mental Clarity</div>
+        <h3>Enfoque sin ansiedad</h3>
+        <p>Café con hongos funcionales, pensado para la claridad mental.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALM BAND -->
+  <section class="calm-band" style="margin: 0 -20px; padding-left: 20px; padding-right: 20px;">
+    <div class="wrap" style="padding: 0;">
+      <div class="calm-grid">
+        <div>
+          <div class="section-eyebrow">Mente y calma</div>
+          <h2>Un ritual completo para tu día a día</h2>
+          <div class="calm-list">
+            <div class="calm-item">
+              <div class="ico">🧘</div>
+              <p><strong>Menos estrés:</strong> adaptógenos y minerales que acompañan tu sistema nervioso.</p>
+            </div>
+            <div class="calm-item">
+              <div class="ico">🎯</div>
+              <p><strong>Más enfoque:</strong> Fungi Café aporta claridad mental sin los picos de la cafeína tradicional.</p>
+            </div>
+            <div class="calm-item">
+              <div class="ico">🌿</div>
+              <p><strong>Control mental completo:</strong> una rutina diaria simple, fácil de mantener y de revender.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="numbers-card">
+          <div class="numbers-grid">
+            <div class="stat-box">
+              <div class="label">Inversión</div>
+              <div class="value">$279.000</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Venta potencial</div>
+              <div class="value">$429.000</div>
+            </div>
+          </div>
+          <div class="profit-banner">
+            <div>
+              <div class="label">Ganancia potencial</div>
+              <div class="value">$150.000</div>
+            </div>
+            <div class="roi">
+              <div class="label">Retorno</div>
+              <div class="value">54%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section>
+    <div class="section-head">
+      <div class="section-eyebrow">Empieza tu negocio</div>
+      <h2>Así de simple es empezar con Infinity Brands</h2>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h3>Compra tu combo</h3>
+        <p>Adquiere el Combo Zenova + Fungi Café con pago seguro a través de Wompi.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h3>Revende con confianza</h3>
+        <p>Ofrece un producto con marca reconocida, empaques listos y beneficios claros.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h3>Recupera tu inversión</h3>
+        <p>Con una venta potencial de $429.000, tu retorno estimado es del 54%.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND STRIP -->
+  <div class="brand-strip">
+    <span>TGB</span>
+    <span>CreaGums</span>
+    <span>Zenova</span>
+    <span>Fungi Café</span>
+  </div>
+
+  <!-- FAQ -->
+  <section>
+    <div class="section-head">
+      <div class="section-eyebrow">Preguntas frecuentes</div>
+      <h2>Todo lo que necesitas saber</h2>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>¿Cómo pago mi combo?</summary>
+        <p>El pago se procesa de forma segura a través de Wompi. Al hacer clic en "Comprar ahora" serás redirigido al checkout oficial de Wompi para completar tu compra.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué incluye exactamente el combo?</summary>
+        <p>3 unidades de la línea Zenova (Inositol, Cúrcuma, Ashwagandha, Magnesio, Remolacha y Queen) y 3 unidades de Fungi Café Mental Clarity.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Los precios pueden cambiar?</summary>
+        <p>Sí, los precios de inversión, venta potencial y ganancia mostrados están sujetos a cambio según disponibilidad e inventario.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Necesito experiencia previa para revender?</summary>
+        <p>No. El combo está pensado para que cualquier persona pueda empezar a vender de inmediato, con productos ya formulados y listos para ofrecer.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section>
+    <div class="final-cta">
+      <h2>Empieza tu negocio con Infinity Brands</h2>
+      <p>TGB · CreaGums · Zenova · Fungi Café — todo en un solo combo, con pago seguro por Wompi.</p>
+      <a class="btn btn-primary" href="https://checkout.wompi.co/l/oVn5Vk" target="_blank" rel="noopener">
+        Comprar mi combo — $279.000
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div>© <span id="year"></span> Infinity Brands. Todos los derechos reservados.</div>
+  <div class="disclaimer">Precios sujetos a cambio. Este producto no reemplaza tratamientos médicos.</div>
+</footer>
+
+<!-- Mobile sticky CTA -->
+<div class="sticky-bar">
+  <div class="price">Inversión<strong>$279.000</strong></div>
+  <a class="btn btn-primary btn-small" href="https://checkout.wompi.co/l/oVn5Vk" target="_blank" rel="noopener">Comprar ahora</a>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

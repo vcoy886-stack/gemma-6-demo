@@ -27,7 +27,7 @@ Navegador
    ├── Client Components (formularios, tablas, kanban, chat IA)
    │
    ▼
-Next.js Route Handlers (app/api/**)  ──►  Prisma ORM  ──►  SQLite / PostgreSQL
+Next.js Route Handlers (app/api/**)  ──►  Prisma ORM  ──►  PostgreSQL
    │
    ├── lib/auth.ts        → sesión JWT en cookie httpOnly
    ├── lib/permissions.ts → RBAC (qué puede ver/hacer cada rol)
@@ -47,7 +47,7 @@ rutas de página: sin sesión válida, redirige a `/login`.
 | UI | React 19, Tailwind CSS v4 | Interfaz propia, sin dependencia de librerías de componentes pesadas |
 | Gráficos | Recharts | Gráficos del dashboard |
 | Drag & drop | @dnd-kit | Pipeline tipo Kanban |
-| Base de datos | Prisma ORM 6 + SQLite (dev) | Real, persistente, tipado extremo a extremo; cambia a PostgreSQL con una variable de entorno |
+| Base de datos | Prisma ORM 6 + PostgreSQL | Real, persistente, tipado extremo a extremo; funciona igual en local y en producción (Vercel Postgres, Neon, Supabase, RDS, etc.) |
 | Autenticación | JWT propio (`jose`) + `bcryptjs` | Sin dependencias de terceros de pago; cookies httpOnly |
 | PDF | `pdfkit` | Generación real de cotizaciones en PDF |
 | CSV | `papaparse` | Importación de clientes |
@@ -98,7 +98,8 @@ Ver `.env.example`. Variables:
 
 ## 5. Instalación
 
-Requisitos: Node.js 20+.
+Requisitos: Node.js 20+ y una base de datos PostgreSQL (local vía Docker, o gratis en
+[Neon](https://neon.tech) / [Supabase](https://supabase.com) / Vercel Postgres).
 
 ```bash
 git clone <este-repositorio>
@@ -106,10 +107,11 @@ cd gemma-6-demo
 npm install
 
 cp .env.example .env
-# Edita .env: define AUTH_SECRET propio (ver arriba) y, opcionalmente, ANTHROPIC_API_KEY
+# Edita .env: DATABASE_URL con tu Postgres real, AUTH_SECRET propio (ver arriba) y,
+# opcionalmente, ANTHROPIC_API_KEY
 
-npx prisma migrate dev   # crea la base de datos SQLite y aplica el esquema
-npm run dev              # http://localhost:3000
+npx prisma migrate deploy   # aplica el esquema a tu base de datos
+npm run dev                 # http://localhost:3000
 ```
 
 Al entrar por primera vez, crea tu empresa desde `/register` (esto genera el usuario
@@ -122,14 +124,26 @@ administrador a **Configuración → Datos de demostración**.
 
 ## 6. Despliegue
 
-1. Aprovisiona una base de datos PostgreSQL (o mantén SQLite para un despliegue de un
-   solo proceso con disco persistente — no recomendado en plataformas serverless).
+### En Vercel
+
+1. Importa el repositorio como proyecto de Vercel (detecta Next.js automáticamente).
+2. En **Settings → Storage**, agrega una base de datos Postgres (Neon o Supabase desde
+   el Marketplace de Vercel; capa gratuita disponible) — esto define `DATABASE_URL`
+   automáticamente.
+3. En **Settings → Environment Variables** agrega `AUTH_SECRET` (obligatoria) y, si
+   quieres el asistente generativo, `ANTHROPIC_API_KEY`.
+4. Vuelve a desplegar. El script de build (`prisma generate && prisma migrate deploy &&
+   next build`) aplica el esquema automáticamente en cada deploy — no necesitas correr
+   migraciones a mano. El primer build fallará si el paso 2-3 no se hizo antes; una vez
+   configurado, un redeploy lo resuelve.
+
+### En cualquier otra plataforma Node
+
+1. Aprovisiona PostgreSQL (RDS, Railway, un contenedor, etc.).
 2. Define `DATABASE_URL`, `AUTH_SECRET` y, si aplica, `ANTHROPIC_API_KEY` /
    `WHATSAPP_ACCESS_TOKEN` en las variables de entorno del proveedor.
-3. `npx prisma migrate deploy` para aplicar las migraciones en producción.
-4. `npm run build && npm run start`, o despliega en cualquier plataforma compatible con
-   Next.js (Vercel, Railway, un servidor Node propio, contenedor Docker, etc.).
-5. Si usarás automatizaciones basadas en tiempo (sin respuesta hace X días, cotización
+3. `npm run build && npm run start` (el build ya incluye `prisma migrate deploy`).
+4. Si usarás automatizaciones basadas en tiempo (sin respuesta hace X días, cotización
    por vencer), programa una llamada periódica a `POST /api/automations/run` con un
    programador externo (cron del sistema operativo, Vercel Cron, etc.) — ver limitación
    en la sección 11.

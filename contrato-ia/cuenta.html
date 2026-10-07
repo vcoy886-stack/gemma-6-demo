@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi cuenta · ContratoIA</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css?v=20260904">
+</head>
+<body>
+<a class="skip-link" href="#cuenta-contenido">Saltar al contenido</a>
+
+<header class="appbar">
+  <div class="container appbar-row">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">§</span> ContratoIA</a>
+    <nav class="appbar-links" aria-label="Navegación de la app">
+      <a href="app.html">Analizar</a>
+      <a href="cuenta.html"><strong>Mi cuenta</strong></a>
+    </nav>
+    <div class="appbar-right">
+      <span class="creditos-pill" id="pill-creditos">⚡ …</span>
+      <button class="btn btn--ghost btn--sm" id="btn-salir" type="button">Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="app-shell container" id="cuenta-contenido">
+  <div class="demo-banner"><span aria-hidden="true">⚠️</span> MODO DEMO — los pagos son simulados, no se cobra nada</div>
+
+  <h1>Mi cuenta</h1>
+  <p class="muted" id="cuenta-email" style="margin-bottom:1.6rem">Cargando…</p>
+
+  <div class="cuenta-grid">
+    <div class="card">
+      <div class="plan-actual">
+        <div><h3 id="plan-nombre">—</h3><p class="muted" id="plan-renovacion">—</p></div>
+        <span class="badge badge--ok" id="plan-badge">—</span>
+      </div>
+      <div class="stats-row">
+        <div class="mini-stat"><b id="stat-creditos">—</b><span>Créditos disponibles</span></div>
+        <div class="mini-stat"><b id="stat-usados">—</b><span>Contratos analizados</span></div>
+      </div>
+      <div class="stack" style="gap:.6rem">
+        <button class="btn btn--primary btn--block" type="button" id="btn-mejorar">Mejorar plan</button>
+        <button class="btn btn--danger btn--block" type="button" id="btn-cancelar" hidden>Cancelar plan y volver a Gratis</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Cuenta de prueba</h3>
+      <p class="muted">Esta es una demostración de ContratoIA. Ningún pago es real mientras veas la insignia <strong>MODO DEMO</strong>.</p>
+      <p class="muted" style="margin-top:.8rem">¿Dudas o soporte? Escríbenos a <a href="mailto:soporte@contratoia.app">soporte@contratoia.app</a>.</p>
+    </div>
+  </div>
+
+  <section style="margin-top:2rem">
+    <h2 style="margin-bottom:1rem">Historial de contratos analizados</h2>
+    <div id="historial-contenido" class="historial-list"><p class="muted">Cargando…</p></div>
+  </section>
+</main>
+
+<dialog id="modal-upgrade">
+  <div class="modal">
+    <button class="modal-close" aria-label="Cerrar">✕</button>
+    <h3>Mejora tu plan</h3>
+    <p class="muted" style="margin-bottom:1.2rem">Elige el plan que se ajuste a cuántos contratos revisas al mes.</p>
+    <div class="stack" style="gap:.7rem">
+      <button class="btn btn--primary btn--block" type="button" data-checkout="pro">Pro — $14.99/mes (50 análisis + historial)</button>
+      <button class="btn btn--ghost btn--block" type="button" data-checkout="experto">Experto — $29.99/mes (ilimitado + PDF + soporte prioritario)</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="modal-checkout">
+  <div class="modal">
+    <button class="modal-close" aria-label="Cerrar">✕</button>
+    <span class="badge badge--demo" style="margin-bottom:.8rem">⚠️ MODO DEMO — pago simulado</span>
+    <h3 id="checkout-titulo">Confirmar plan</h3>
+    <p class="muted" id="checkout-desc" style="margin-bottom:1.2rem"></p>
+    <div class="form-field"><label>Número de tarjeta</label><input type="text" value="4242 4242 4242 4242" disabled></div>
+    <div style="display:flex;gap:.8rem">
+      <div class="form-field" style="flex:1"><label>Vencimiento</label><input type="text" value="12/29" disabled></div>
+      <div class="form-field" style="flex:1"><label>CVC</label><input type="text" value="123" disabled></div>
+    </div>
+    <button class="btn btn--primary btn--block" type="button" id="btn-simular-pago">Simular pago</button>
+    <p class="form-help" style="margin-top:.8rem">No se realizará ningún cobro real. Esta es una demostración.</p>
+  </div>
+</dialog>
+
+<script defer src="lib/comun.js"></script>
+<script defer src="lib/manifest.js"></script>
+<script defer src="cuenta.js?v=20260904"></script>
+</body>
+</html>

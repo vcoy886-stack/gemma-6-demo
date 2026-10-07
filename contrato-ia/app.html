@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analizar contrato · ContratoIA</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css?v=20260904">
+</head>
+<body>
+<a class="skip-link" href="#app-contenido">Saltar al contenido</a>
+
+<header class="appbar">
+  <div class="container appbar-row">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">§</span> ContratoIA</a>
+    <nav class="appbar-links" aria-label="Navegación de la app">
+      <a href="app.html"><strong>Analizar</strong></a>
+      <a href="cuenta.html">Mi cuenta</a>
+    </nav>
+    <div class="appbar-right">
+      <span class="creditos-pill" id="pill-creditos" title="Créditos disponibles">⚡ …</span>
+      <a class="btn btn--ghost btn--sm" href="cuenta.html">Cuenta</a>
+      <button class="btn btn--ghost btn--sm" id="btn-salir" type="button">Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="app-shell container" id="app-contenido">
+  <div class="demo-banner"><span aria-hidden="true">⚠️</span> MODO DEMO — los pagos son simulados, no se cobra nada</div>
+
+  <div class="app-grid">
+    <section class="panel-trabajo" style="grid-column:1/-1; max-width:820px">
+      <div class="card">
+        <h2 style="margin-bottom:.3rem">Analizar un contrato</h2>
+        <p class="muted" style="margin-bottom:1.2rem">Pega el texto completo del contrato. Mientras más completo, mejor el análisis.</p>
+
+        <form id="form-analizar">
+          <div class="form-field">
+            <label for="tipo-select">Tipo de contrato</label>
+            <select id="tipo-select" name="tipo" style="padding:.75rem .9rem;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff">
+              <option value="freelance">Servicios / freelance</option>
+              <option value="arriendo">Arriendo</option>
+              <option value="laboral">Laboral</option>
+              <option value="marca">Marca / colaboración</option>
+              <option value="otro" selected>Otro</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="contrato-input">Texto del contrato</label>
+            <textarea id="contrato-input" name="contrato" required style="min-height:280px" placeholder="Pega aquí el texto completo del contrato: cláusulas, plazos, montos, obligaciones de cada parte..."></textarea>
+          </div>
+          <div class="panel-head">
+            <span class="costo-line">⚡ Este análisis usa <strong>1 crédito</strong></span>
+            <button class="btn btn--primary" type="submit" id="btn-analizar">Analizar contrato</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" data-state="idle" id="panel-resultado">
+        <p class="estado-idle muted">Tu análisis aparecerá aquí. Pega el contrato y presiona «Analizar contrato».</p>
+        <div class="estado-working working-box"><span class="spinner" aria-hidden="true"></span> Analizando tu contrato…</div>
+        <div class="estado-done">
+          <div class="panel-head no-print">
+            <span class="badge badge--ok" id="resultado-tipo-badge">Análisis</span>
+            <div style="display:flex;gap:.5rem">
+              <button class="btn btn--ghost btn--sm" type="button" id="btn-exportar-pdf" hidden>Exportar PDF</button>
+              <button class="btn btn--ghost btn--sm" type="button" id="btn-nuevo">Nuevo análisis</button>
+            </div>
+          </div>
+          <div class="resultado" id="resultado-texto"></div>
+        </div>
+        <div class="estado-error">
+          <p class="error-box" id="error-texto"></p>
+        </div>
+      </div>
+
+      <div class="card" id="panel-historial">
+        <h3>Historial</h3>
+        <div id="historial-contenido" class="historial-list"><p class="muted">Cargando…</p></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<dialog id="modal-upgrade">
+  <div class="modal">
+    <button class="modal-close" aria-label="Cerrar">✕</button>
+    <h3>Se te acabaron los créditos</h3>
+    <p class="muted" style="margin-bottom:1.2rem">Mejora tu plan para seguir analizando contratos este mes.</p>
+    <div class="stack" style="gap:.7rem">
+      <button class="btn btn--primary btn--block" type="button" data-checkout="pro">Mejorar a Pro — $14.99/mes (50 análisis)</button>
+      <button class="btn btn--ghost btn--block" type="button" data-checkout="experto">Mejorar a Experto — $29.99/mes (ilimitado)</button>
+    </div>
+    <p class="form-help" style="margin-top:1rem">También puedes esperar a la renovación del próximo mes.</p>
+  </div>
+</dialog>
+
+<dialog id="modal-checkout">
+  <div class="modal">
+    <button class="modal-close" aria-label="Cerrar">✕</button>
+    <span class="badge badge--demo" style="margin-bottom:.8rem">⚠️ MODO DEMO — pago simulado</span>
+    <h3 id="checkout-titulo">Confirmar plan</h3>
+    <p class="muted" id="checkout-desc" style="margin-bottom:1.2rem"></p>
+    <div class="form-field"><label>Número de tarjeta</label><input type="text" value="4242 4242 4242 4242" disabled></div>
+    <div style="display:flex;gap:.8rem">
+      <div class="form-field" style="flex:1"><label>Vencimiento</label><input type="text" value="12/29" disabled></div>
+      <div class="form-field" style="flex:1"><label>CVC</label><input type="text" value="123" disabled></div>
+    </div>
+    <button class="btn btn--primary btn--block" type="button" id="btn-simular-pago">Simular pago</button>
+    <p class="form-help" style="margin-top:.8rem">No se realizará ningún cobro real. Esta es una demostración.</p>
+  </div>
+</dialog>
+
+<script defer src="lib/comun.js"></script>
+<script defer src="lib/manifest.js"></script>
+<script defer src="app.js?v=20260904"></script>
+</body>
+</html>

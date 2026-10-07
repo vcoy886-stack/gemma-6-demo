@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tu asesor · FinanzasIA</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css?v=20260903">
+</head>
+<body>
+<a class="skip-link" href="#app-contenido">Saltar al contenido</a>
+
+<header class="appbar">
+  <div class="container appbar-row">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">$</span> FinanzasIA</a>
+    <nav class="appbar-links" aria-label="Navegación de la app">
+      <a href="app.html"><strong>Analizar</strong></a>
+      <a href="cuenta.html">Mi cuenta</a>
+    </nav>
+    <div class="appbar-right">
+      <span class="creditos-pill" id="pill-creditos" title="Créditos disponibles">⚡ …</span>
+      <a class="btn btn--ghost btn--sm" href="cuenta.html">Cuenta</a>
+      <button class="btn btn--ghost btn--sm" id="btn-salir" type="button">Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="app-shell container" id="app-contenido">
+  <div class="demo-banner"><span aria-hidden="true">⚠️</span> MODO DEMO — los pagos son simulados, no se cobra nada</div>
+
+  <div class="app-grid">
+    <nav class="modulo-selector" aria-label="Módulos de análisis">
+      <button type="button" class="modulo-btn is-active" data-modulo="radiografia"
+        data-placeholder="Pega aquí tus ingresos mensuales, gastos fijos y variables, deudas y ahorros. Ejemplo:&#10;Ingreso mensual: 1800&#10;Gastos fijos: arriendo 600, servicios 120, transporte 100&#10;Gastos variables: comida 350, entretenimiento 150&#10;Deudas: tarjeta de crédito 900 al 32% anual&#10;Ahorros actuales: 300">
+        <span class="ico" aria-hidden="true">🩺</span><span><strong>Radiografía financiera</strong><span>Diagnóstico completo de tu situación actual.</span></span>
+      </button>
+      <button type="button" class="modulo-btn" data-modulo="presupuesto"
+        data-placeholder="Pega tu ingreso mensual y tus gastos actuales por categoría. Ejemplo:&#10;Ingreso mensual: 1800&#10;Arriendo: 600&#10;Comida: 350&#10;Transporte: 100&#10;Servicios: 120&#10;Entretenimiento: 150&#10;Ahorro actual: 80">
+        <span class="ico" aria-hidden="true">📊</span><span><strong>Presupuesto inteligente</strong><span>Un presupuesto mensual realista.</span></span>
+      </button>
+      <button type="button" class="modulo-btn" data-modulo="optimizacion"
+        data-placeholder="Pega el detalle de tus gastos del último mes, cuanto más detallado mejor. Ejemplo:&#10;Suscripciones: Netflix 12, Spotify 6, gimnasio 35&#10;Comida fuera: 180&#10;Delivery: 90&#10;Compras impulsivas: 60&#10;Transporte: 100">
+        <span class="ico" aria-hidden="true">✂️</span><span><strong>Optimización de gastos</strong><span>Dónde recortar sin sacrificar calidad de vida.</span></span>
+      </button>
+      <button type="button" class="modulo-btn" data-modulo="antideudas"
+        data-placeholder="Pega tus deudas: monto, tasa de interés y pago mínimo de cada una. Ejemplo:&#10;Tarjeta A: 1200, tasa 32% anual, pago mínimo 80&#10;Tarjeta B: 500, tasa 28% anual, pago mínimo 40&#10;Préstamo personal: 2000, tasa 18% anual, cuota 150&#10;Disponible extra para pagar deudas al mes: 100">
+        <span class="ico" aria-hidden="true">🧯</span><span><strong>Plan anti-deudas</strong><span>Estrategia clara para salir de deudas.</span></span>
+      </button>
+      <button type="button" class="modulo-btn" data-modulo="fondo_emergencia"
+        data-placeholder="Pega tus gastos mensuales esenciales y cuánto tienes ahorrado hoy. Ejemplo:&#10;Gastos esenciales mensuales: 950&#10;Ahorro actual disponible: 400&#10;Cuánto puedo ahorrar extra al mes: 100&#10;Estabilidad laboral: empleo fijo">
+        <span class="ico" aria-hidden="true">🛟</span><span><strong>Fondo de emergencia</strong><span>Cuánto necesitas y cómo llegar.</span></span>
+      </button>
+      <button type="button" class="modulo-btn" data-modulo="patrimonial"
+        data-placeholder="Pega tu edad, ingreso, ahorro mensual actual y tus metas de largo plazo. Ejemplo:&#10;Edad: 32&#10;Ingreso mensual: 2200&#10;Ahorro/inversión mensual actual: 200&#10;Metas: jubilarme cómodo, comprar vivienda en 5 años&#10;Deudas importantes: ninguna">
+        <span class="ico" aria-hidden="true">🏛️</span><span><strong>Plan patrimonial</strong><span>Visión de largo plazo para tu patrimonio.</span></span>
+      </button>
+      <button type="button" class="modulo-btn" data-modulo="auditoria"
+        data-placeholder="Pega toda la información financiera que tengas: ingresos, gastos, deudas, ahorros, seguros, metas. Mientras más completo, mejor la auditoría.">
+        <span class="ico" aria-hidden="true">🔍</span><span><strong>Auditoría financiera</strong><span>Una revisión crítica, sin filtros.</span></span>
+      </button>
+    </nav>
+
+    <section class="panel-trabajo">
+      <div class="card">
+        <div class="panel-head">
+          <div>
+            <h2 id="modulo-titulo">Radiografía financiera</h2>
+            <p class="muted" id="modulo-resumen">Diagnóstico completo de tu situación financiera actual.</p>
+          </div>
+        </div>
+
+        <form id="form-analizar">
+          <div class="form-field">
+            <label for="datos-input">Tus datos financieros</label>
+            <textarea id="datos-input" name="datos" required placeholder="Pega aquí tus datos..."></textarea>
+          </div>
+          <div class="panel-head">
+            <span class="costo-line">⚡ Este análisis usa <strong>1 crédito</strong></span>
+            <button class="btn btn--primary" type="submit" id="btn-analizar">Analizar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" data-state="idle" id="panel-resultado">
+        <p class="estado-idle muted">Tu análisis aparecerá aquí. Pega tus datos y presiona «Analizar».</p>
+        <div class="estado-working working-box"><span class="spinner" aria-hidden="true"></span> Analizando tus datos…</div>
+        <div class="estado-done">
+          <div class="panel-head no-print">
+            <span class="badge badge--ok" id="resultado-modulo-badge">Radiografía financiera</span>
+            <div style="display:flex;gap:.5rem">
+              <button class="btn btn--ghost btn--sm" type="button" id="btn-exportar-pdf" hidden>Exportar PDF</button>
+              <button class="btn btn--ghost btn--sm" type="button" id="btn-nuevo">Nuevo análisis</button>
+            </div>
+          </div>
+          <div class="resultado" id="resultado-texto"></div>
+        </div>
+        <div class="estado-error">
+          <p class="error-box" id="error-texto"></p>
+        </div>
+      </div>
+
+      <div class="card" id="panel-historial">
+        <h3>Historial</h3>
+        <div id="historial-contenido" class="historial-list"><p class="muted">Cargando…</p></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<dialog id="modal-upgrade">
+  <div class="modal">
+    <button class="modal-close" aria-label="Cerrar">✕</button>
+    <h3>Se te acabaron los créditos</h3>
+    <p class="muted" style="margin-bottom:1.2rem">Mejora tu plan para seguir analizando tus finanzas este mes.</p>
+    <div class="stack" style="gap:.7rem">
+      <button class="btn btn--primary btn--block" type="button" data-checkout="pro">Mejorar a Pro — $9.99/mes (100 análisis)</button>
+      <button class="btn btn--ghost btn--block" type="button" data-checkout="experto">Mejorar a Experto — $19.99/mes (ilimitado)</button>
+    </div>
+    <p class="form-help" style="margin-top:1rem">También puedes esperar a la renovación del próximo mes.</p>
+  </div>
+</dialog>
+
+<dialog id="modal-checkout">
+  <div class="modal">
+    <button class="modal-close" aria-label="Cerrar">✕</button>
+    <span class="badge badge--demo" style="margin-bottom:.8rem">⚠️ MODO DEMO — pago simulado</span>
+    <h3 id="checkout-titulo">Confirmar plan</h3>
+    <p class="muted" id="checkout-desc" style="margin-bottom:1.2rem"></p>
+    <div class="form-field"><label>Número de tarjeta</label><input type="text" value="4242 4242 4242 4242" disabled></div>
+    <div style="display:flex;gap:.8rem">
+      <div class="form-field" style="flex:1"><label>Vencimiento</label><input type="text" value="12/29" disabled></div>
+      <div class="form-field" style="flex:1"><label>CVC</label><input type="text" value="123" disabled></div>
+    </div>
+    <button class="btn btn--primary btn--block" type="button" id="btn-simular-pago">Simular pago</button>
+    <p class="form-help" style="margin-top:.8rem">No se realizará ningún cobro real. Esta es una demostración.</p>
+  </div>
+</dialog>
+
+<script defer src="lib/comun.js"></script>
+<script defer src="lib/manifest.js"></script>
+<script defer src="app.js?v=20260903"></script>
+</body>
+</html>

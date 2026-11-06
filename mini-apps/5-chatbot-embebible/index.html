@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ChatIA Embebible — Chatbot on-device sin costo de API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .snippet-box {
+    background: #0a0b10; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 16px; font-family: var(--font-mono); font-size: 12.5px; color: var(--gem-3);
+    overflow-x: auto; white-space: pre; margin-top: 10px;
+  }
+  .compare-table { width: 100%; border-collapse: collapse; max-width: 760px; margin: 0 auto; }
+  .compare-table th, .compare-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; font-size: 14px; }
+  .compare-table th { color: var(--text-dim); font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em; }
+  .compare-table td.good { color: var(--success); }
+  .compare-table td.bad { color: var(--danger); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="../../index.html"><span class="gem-icon">🔮</span> Mini Apps IA</a>
+  <div class="nav-links">
+    <a href="#comparativa">Por qué on-device</a>
+    <a href="#demo">Configurar</a>
+    <a href="#precios">Precios</a>
+  </div>
+  <a class="btn btn-primary btn-sm" href="#demo">Crear mi chatbot</a>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow"><span class="dot"></span> Para pymes que quieren IA sin factura sorpresa</div>
+  <h1>Un chatbot de IA en tu web, <span class="grad">con costo de API $0</span></h1>
+  <p class="sub">El modelo corre en el navegador de cada visitante (WebGPU), no en tus servidores. Miles de conversaciones al mes, sin pagar por token.</p>
+  <div class="hero-cta">
+    <a href="#demo" class="btn btn-primary">Configurar mi chatbot</a>
+    <a href="demo.html" class="btn btn-ghost" target="_blank">Ver ejemplo embebido en una web →</a>
+  </div>
+</section>
+
+<section id="comparativa" class="tight">
+  <div class="section-head">
+    <div class="kicker">La diferencia</div>
+    <h2>Por qué "on-device" cambia el negocio</h2>
+    <p>Un chatbot con API de OpenAI/Claude cobra por cada mensaje. Este corre gratis en el dispositivo del visitante.</p>
+  </div>
+  <table class="compare-table">
+    <tr><th></th><th>Chatbot con API en la nube</th><th>ChatIA Embebible (on-device)</th></tr>
+    <tr><td>Costo por conversación</td><td class="bad">Variable, sube con el tráfico</td><td class="good">$0</td></tr>
+    <tr><td>Dependencia de un proveedor de IA</td><td class="bad">Sí (clave API, límites, cortes)</td><td class="good">No</td></tr>
+    <tr><td>Privacidad de los datos del cliente</td><td class="bad">Salen a un servidor externo</td><td class="good">Nunca salen del navegador</td></tr>
+    <tr><td>Instalación</td><td class="bad">Backend + claves + facturación</td><td class="good">Un &lt;script&gt; en tu web</td></tr>
+  </table>
+</section>
+
+<section id="demo">
+  <div class="section-head">
+    <div class="kicker">Configúralo ahora</div>
+    <h2>Arma tu chatbot y pruébalo en vivo</h2>
+    <p>Completa la info de tu negocio, dale clic a "Probar" y habla con tu asistente abajo a la derecha.</p>
+  </div>
+
+  <div class="demo-panel">
+    <div class="demo-head">
+      <div class="status-dot ready"></div>
+      <span style="font-size:13px;color:var(--text-dim)">La primera vez descarga el modelo (~2 GB, se guarda en caché del navegador)</span>
+    </div>
+    <div class="demo-body">
+
+      <label for="cbBusiness">Nombre de tu negocio</label>
+      <input type="text" id="cbBusiness" placeholder="Ej. Panadería La Espiga" value="Panadería La Espiga" />
+
+      <label for="cbContext">Información / preguntas frecuentes (esto es lo que "sabe" tu chatbot)</label>
+      <textarea id="cbContext" rows="6" placeholder="Ej. Horario: Lunes a sábado 7am-8pm. Hacemos pasteles personalizados con 3 días de anticipación. Envíos gratis en pedidos mayores a $30...">Horario: lunes a sábado de 7am a 8pm, domingos cerrado.
+Hacemos pasteles personalizados con 3 días de anticipación.
+Envíos gratis en pedidos mayores a $30.
+Aceptamos pagos en efectivo y transferencia.
+Dirección: Av. Principal 123.</textarea>
+
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" id="cbTryBtn" type="button">▶ Probar mi chatbot</button>
+      </div>
+      <p class="footer-note" id="cbStatus">El chatbot aparecerá como una burbuja flotante abajo a la derecha de esta página.</p>
+
+      <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:20px">
+        <label>Código para instalar en tu web (una sola línea)</label>
+        <div class="snippet-box" id="cbSnippet">&lt;script src="https://tudominio.com/widget.js" data-business="Panadería La Espiga" data-context="..."&gt;&lt;/script&gt;</div>
+        <button class="btn btn-ghost btn-sm" id="cbCopySnippet" type="button" style="margin-top:10px">📋 Copiar código de instalación</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="precios" class="tight">
+  <div class="section-head">
+    <div class="kicker">Precios</div>
+    <h2>Márgenes altísimos porque no pagas por token</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan">
+      <h3>Starter</h3>
+      <div class="price">$19<span>/mes</span></div>
+      <div class="price-note">1 sitio web</div>
+      <ul>
+        <li>Conversaciones ilimitadas</li>
+        <li>Personalizable con tu FAQ</li>
+        <li>Instalación con 1 línea de código</li>
+      </ul>
+      <button type="button" class="btn btn-ghost js-wompi-pay" data-plan="Starter" data-cop="76000">Suscribirme — $19/mes</button>
+    </div>
+    <div class="plan featured">
+      <h3>Negocio</h3>
+      <div class="price">$39<span>/mes</span></div>
+      <div class="price-note">hasta 3 sitios web</div>
+      <ul>
+        <li>Todo lo de Starter</li>
+        <li>Colores y logo personalizados</li>
+        <li>Actualiza el FAQ cuando quieras</li>
+      </ul>
+      <button type="button" class="btn btn-primary js-wompi-pay" data-plan="Negocio" data-cop="156000">Suscribirme — $39/mes</button>
+    </div>
+    <div class="plan">
+      <h3>Agencia</h3>
+      <div class="price">$99<span>/mes</span></div>
+      <div class="price-note">para revender a tus clientes</div>
+      <ul>
+        <li>Sitios ilimitados</li>
+        <li>Marca blanca</li>
+        <li>Panel de administración multi-cliente</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost">Hablar con ventas</a>
+    </div>
+  </div>
+  <p style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:18px">Requiere navegadores compatibles con WebGPU (Chrome/Edge 113+) en el dispositivo del visitante.</p>
+</section>
+
+<footer>
+  <p>ChatIA Embebible — parte de la suite Mini Apps IA</p>
+  <div style="margin-top:10px"><a href="../../index.html">← Volver al menú de mini apps</a></div>
+</footer>
+
+<script>
+function updateSnippet() {
+  const business = document.getElementById("cbBusiness").value.trim() || "Tu negocio";
+  const context = document.getElementById("cbContext").value.trim().replace(/\n/g, " ").replace(/"/g, "'");
+  document.getElementById("cbSnippet").textContent =
+    `<script src="https://tudominio.com/widget.js" data-business="${business}" data-context="${context}"><\/script>`;
+}
+document.getElementById("cbBusiness").addEventListener("input", updateSnippet);
+document.getElementById("cbContext").addEventListener("input", updateSnippet);
+updateSnippet();
+
+document.getElementById("cbCopySnippet").addEventListener("click", async () => {
+  const text = document.getElementById("cbSnippet").textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    const b = document.getElementById("cbCopySnippet");
+    b.textContent = "✅ Copiado";
+    setTimeout(() => b.textContent = "📋 Copiar código de instalación", 1800);
+  } catch { alert(text); }
+});
+
+document.getElementById("cbTryBtn").addEventListener("click", () => {
+  const business = document.getElementById("cbBusiness").value.trim() || "Tu negocio";
+  const context = document.getElementById("cbContext").value.trim();
+
+  document.querySelectorAll("[data-gcw-root]").forEach(el => el.remove());
+  document.querySelectorAll("script[data-gcw-instance]").forEach(el => el.remove());
+
+  const s = document.createElement("script");
+  s.src = "widget.js";
+  s.dataset.business = business;
+  s.dataset.context = context;
+  s.setAttribute("data-gcw-instance", "1");
+  document.body.appendChild(s);
+
+  document.getElementById("cbStatus").textContent = "Chatbot cargado — mira la burbuja 💬 abajo a la derecha.";
+});
+</script>
+<script src="wompi-checkout.js"></script>
+</body>
+</html>
